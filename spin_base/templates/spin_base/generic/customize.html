@@ -1,0 +1,44 @@
+{% extends 'spin_base/user_home.html' %}
+{% load i18n %}
+
+{% block extrahead %}
+	{{block.super}}
+	{{form.media}}
+{% endblock %}
+
+{% block body %}
+	<div class="row-fluid well">
+		<div class="span5">
+			<form action="{% url 'spin:customize' %}" id="customize-form" method="post">
+				<fieldset>
+					{% if form.non_field_errors %}
+						<div class="alert alert-block alert-error fade in">
+							<span class="alerthelp-inline">{{ form.non_field_errors }}</span>
+						</div>
+					{% endif %}
+					{% csrf_token %}
+					<legend>{% trans 'Customize your spin look' %}</legend>
+					{% for field in form %}
+						<div class="control-group {% if field.errors %}error{% endif %}">
+							{{field.label}}
+							<div class="controls">
+								{{field}}
+								{% if field.errors %}
+									<span class="help-inline">
+										{% for error in field.errors %}
+											{{ error }}<br/>
+										{% endfor %}
+									</span>
+								{% endif %}
+							</div>
+						</div>
+					{% endfor %}
+					<div class="offset5">
+						<a class="btn" href="{% url 'spin:restore-customization' %}">{% trans 'Reset' %}</a>
+						<input type="submit" class="btn" value="{% trans 'Customize' %}" />
+					</div>
+				</fieldset>
+			</form>
+		</div>
+		<div class="span6"><div id="picker"></div></div>
+{% endblock %}

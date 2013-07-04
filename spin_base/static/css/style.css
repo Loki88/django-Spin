@@ -1,0 +1,123 @@
+
+.main-theme {
+	background-image: url("/static/img/background.jpg");
+	background-position: top;
+	background-repeat: no-repeat;
+	-moz-background-size: cover;
+        -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+
+.separate-container{
+	margin-top: 50px;
+}
+
+.bckg-color-white{
+	background-color: #FFFFFF;
+}
+
+.bckg-color-gray{
+	background-color: #BCBCBC;
+}
+
+footer {
+  margin-top: 45px;
+  padding-top: 5px;
+  border-top: 1px solid #eaeaea;
+  color: #999;
+}
+
+footer a {
+  color: #555;
+}  
+
+footer a:hover { 
+  color: #222;
+}
+
+footer small {
+  float: left;
+}
+
+footer ul {
+  float: right;
+  list-style: none;
+}
+
+footer ul li {
+  float: left;
+  margin-left: 10px;
+}
+
+.image-modal {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 80%;
+  height: 80%;
+  z-index: 99999;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 5%;
+}
+
+.image{
+  cursor: pointer;
+}
+
+.modal-image {
+  display: block;
+  position: relative;
+  height: 80%;
+  width: 80%;
+  margin-right: 10%;
+  margin-left: 10%;
+  margin-top: 10%;
+  margin-bottom: 10%;
+}
+
+.modal-command-box{
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 0%;
+  visibility: hidden;
+}
+
+.modal-command-box:hover{
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 15%;
+  visibility: visible;
+}
+
+.modal-close-button{
+  display: block;
+  position: relative;
+}
+
+.modal-carousel{
+  display: block;
+  position: absolute;
+  width: 70%;
+  min-height: 60%;
+  float: left;
+  z-index: 99999;
+  margin-right: 15%;
+  margin-left: 15%;
+  padding-left: 0;
+  margin-top: 10%;
+  margin-bottom: 10%;
+}
+
+.carousel-inner{
+  position: relative;
+  margin-left: 10%;
+  width: 80%;
+  margin-right: 10%;
+  height: 100%;
+}

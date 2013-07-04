@@ -1,0 +1,24 @@
+{% extends 'spin_base/user_home.html' %}
+
+{% load i18n %}
+
+{% block body %}
+	<h5>{% trans 'Search results for:' %}&nbsp;{{search_string}}</h5>
+	{% for element in page_obj %}
+		{% if element.username %}
+			{% with element as profile %}
+				{% include 'element_box/user_box.html' %}
+			{% endwith %}
+		{% else %}
+			{% with element as spin %}
+				{% include 'element_box/spin_box.html' %}
+			{% endwith %}
+		{% endif %}
+	{% empty %}
+		<div class="row-fluid well">
+			<h6>{% trans "Type another query, this one hasn't produced any result." %}</h6>
+			<p>{% trans "Your query could be too short or generic. Use @ tag for users and #tag for spins" %}</p>
+		</div>
+	{% endfor %}
+{% endblock %}
+

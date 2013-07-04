@@ -1,0 +1,1 @@
+from spin_base.models import *

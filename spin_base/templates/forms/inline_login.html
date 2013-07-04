@@ -1,0 +1,20 @@
+{% load i18n %}
+<div>
+	<form class="form-inline" method="POST" action="#">
+		{% if login_form.non_field_errors %}
+			<div class="control-group error">
+				<span class="help-inline">{% trans 'Wrong username or password' %}</span>
+			</div>
+		{% endif %}
+		{% csrf_token %}
+		<div class="input-prepend">
+			<span class="add-on">@</span>
+			{{ login_form.username }}
+		</div>
+	    {{ login_form.password }}
+	    <label class="checkbox">{% trans 'Remember me' %}
+	    	{{ login_form.remember }}
+	    </label>
+		<input type="submit" class="btn" value="{% trans 'Sign in' %}" />
+	</form>
+</div>

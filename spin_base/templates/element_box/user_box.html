@@ -1,0 +1,56 @@
+{% load i18n %}
+
+<div class="row-fluid well">
+	<div class="span2">
+		{% if profile.image %}
+			{% if profile.image.url|slice:"-5:-4" == "." %}
+				<img class="img-polaroid" class="image" data-full-size="{{profile.image.url}}" src="{{profile.image.url|slice:":-5"}}resized_{{profile.image.url|slice:"-5:"}}" />
+			{% else %}
+				<img class="img-polaroid" class="image" data-full-size="{{profile.image.url}}" src="{{profile.image.url|slice:":-4"}}resized_{{profile.image.url|slice:"-4:"}}" />
+			{% endif %}
+		{% else %}
+			<img class="img-polaroid" src="{{MEDIA_URL}}img/default-person.gif" />
+		{% endif %}
+	</div>
+	<div class="span10">
+		<div class="row-fluid">
+			<div class="span7">
+				<h6>
+					<a href="{% url 'spin:user-profile' slug=profile.username %}">{{profile.first_name}}&nbsp;{{profile.last_name}}@{{profile.username}}</a>
+				</h6>
+			</div>
+			<div class="span4 offset1">
+				<div class="btn-group">
+					{% if user.username != profile.username %}
+						{% if not userprofile in profile.followers.all %}
+							<a href="{% url 'spin:user-follow' username=profile.username %}">
+								<button class="btn">{% trans 'Follow' %}</button>
+							</a>
+						{% else %}
+							<a href="{% url 'spin:user-stop-follow' username=profile.username %}">
+								<button class="btn">{% trans 'Stop Follow' %}</button>
+							</a>
+						{% endif %}
+						<button class="btn dropdown-toggle" data-toggle="dropdown">
+							<i class="icon-user"></i>
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							{% if profile not in userprofile.blocked.all %}
+								<li><a tabindex="-1" href="{% url 'spin:user-block' username=profile.username %}">{% trans 'Block' %}</a></li>
+							{% else %}
+								<li><a tabindex="-1" href="{% url 'spin:user-remove-block' username=profile.username %}">{% trans 'Unblock' %}</a></li>
+							{% endif %}
+							<li><a tabindex="-1" class="report" data-name="user" href="{% url 'spin:report-user' userid=profile.id %}">{% trans 'Report to admin' %}</a></li>
+						</ul>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		<div class="well">
+			{% with profile.spinned.latest as last_spin %}
+				<div class="spin*">{{last_spin.content}}</div>
+			{% endwith %}
+		</div>	
+	</div>
+</div>

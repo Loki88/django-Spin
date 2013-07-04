@@ -1,0 +1,28 @@
+{% load i18n %}
+
+<div class="row-fluid comment-area">
+	<div class="span* well">
+		<formfield>
+			<form method="post" class="comment-form" action="{% url 'spin:comment-spin' spin_id=spin.id %}">
+				{% csrf_token %}
+				<div class="control-group {% if comment_form.content.errors %}error{% endif %}">
+					<div class="control">
+						<div class="row-fluid">
+							{{comment_form.content}}
+							{% if comment_form.content.errors %}
+								<span class="help-block">
+									{% for error in comment_form.content.errors %}
+										{{ error }}<br/>
+									{% endfor %}
+								</span>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+				<div class="span*">
+					<input type="submit" class="btn" value="{% trans 'Comment' %}"/>
+				</div>
+			</form>
+		</formfield>
+	</div>
+</div>

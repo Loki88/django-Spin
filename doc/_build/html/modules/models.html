@@ -1,0 +1,505 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2. Models &mdash; spin: another Twitter clone 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="spin: another Twitter clone 1.0 documentation" href="../index.html" />
+    <link rel="next" title="3. Views" href="views.html" />
+    <link rel="prev" title="1. Intro to spin" href="intro.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="views.html" title="3. Views"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="1. Intro to spin"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">spin: another Twitter clone 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="models">
+<h1>2. Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h1>
+<p>The Spin class is the center of the application. It represents what the users can condivide with other ones:</p>
+<ul class="simple">
+<li>simple Spin: only-text;</li>
+<li>multimedia Spin: text + multimedia (images or videos).</li>
+</ul>
+<p>Since a Spin could contain etherogeneous contents, it&#8217;s important to provide a robust implementation for it.
+The way this can be achieved is to use a powerful trick offered by Django ORM: ereditariety.
+.. Thinking at the main problem:</p>
+<div class="section" id="class-reference">
+<h2>2.1. Class Reference<a class="headerlink" href="#class-reference" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="userprofile">
+<h3>2.1.1. UserProfile<a class="headerlink" href="#userprofile" title="Permalink to this headline">¶</a></h3>
+<span class="target" id="module-spin_base.models.user"></span><dl class="class">
+<dt id="spin_base.models.user.UserProfile">
+<em class="property">class </em><tt class="descclassname">spin_base.models.user.</tt><tt class="descname">UserProfile</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/models/user.html#UserProfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.models.user.UserProfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>UserProfile adds some features to Django&#8217;s authentication User class.</p>
+<dl class="attribute">
+<dt id="spin_base.models.user.UserProfile.activation">
+<tt class="descname">activation</tt><em class="property"> = None</em><a class="headerlink" href="#spin_base.models.user.UserProfile.activation" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is different from user.is_active. It contains the activation key.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.models.user.UserProfile.blocked">
+<tt class="descname">blocked</tt><a class="headerlink" href="#spin_base.models.user.UserProfile.blocked" title="Permalink to this definition">¶</a></dt>
+<dd><p>This field represents user&#8217;s black list.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.models.user.UserProfile.following">
+<tt class="descname">following</tt><a class="headerlink" href="#spin_base.models.user.UserProfile.following" title="Permalink to this definition">¶</a></dt>
+<dd><p>The following mechanism needs relationship between many users. An user
+can have many follower and following many people. The relationship needs to be
+approved by a private user, so there&#8217;s the need of a field &#8220;approved&#8221; in a
+separate table.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.models.user.UserProfile.get_absolute_url">
+<tt class="descname">get_absolute_url</tt><big>(</big><em>*moreargs</em>, <em>**morekwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/models/user.html#UserProfile.get_absolute_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.models.user.UserProfile.get_absolute_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the url where is visible the user profile.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.models.user.UserProfile.get_requests">
+<tt class="descname">get_requests</tt><big>(</big><big>)</big><a class="headerlink" href="#spin_base.models.user.UserProfile.get_requests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of waiting requests.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.models.user.UserProfile.is_black_listed">
+<tt class="descname">is_black_listed</tt><big>(</big><em>user</em><big>)</big><a class="headerlink" href="#spin_base.models.user.UserProfile.is_black_listed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if <em>self</em> is in <em>user</em>&#8216;s black list.
+Kwargs:</p>
+<blockquote>
+<div>user: UserProfile object, who need to be checked in black list</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.models.user.UserProfile.is_following">
+<tt class="descname">is_following</tt><big>(</big><em>user</em><big>)</big><a class="headerlink" href="#spin_base.models.user.UserProfile.is_following" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Returns:</dt>
+<dd>True &#8211; user is followed by this instance of user profile
+False &#8211; if he&#8217;s not followed</dd>
+<dt>Kwargs:</dt>
+<dd>instance: the file instance
+filename: the name of file</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.models.user.UserProfile.is_signaled">
+<tt class="descname">is_signaled</tt><big>(</big><big>)</big><a class="headerlink" href="#spin_base.models.user.UserProfile.is_signaled" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.models.user.UserProfile.private">
+<tt class="descname">private</tt><em class="property"> = None</em><a class="headerlink" href="#spin_base.models.user.UserProfile.private" title="Permalink to this definition">¶</a></dt>
+<dd><p>A bool indicating if the profile is reserved to accepted followings.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.models.user.UserProfile.report_number">
+<tt class="descname">report_number</tt><big>(</big><big>)</big><a class="headerlink" href="#spin_base.models.user.UserProfile.report_number" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.models.user.UserProfile.set_activation_key">
+<tt class="descname">set_activation_key</tt><big>(</big><big>)</big><a class="headerlink" href="#spin_base.models.user.UserProfile.set_activation_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the activation key for the user</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>None</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.models.user.UserProfile.style">
+<tt class="descname">style</tt><a class="headerlink" href="#spin_base.models.user.UserProfile.style" title="Permalink to this definition">¶</a></dt>
+<dd><p>The id of the choosen style for spin-app.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.models.user.UserProfile.time_zone">
+<tt class="descname">time_zone</tt><em class="property"> = None</em><a class="headerlink" href="#spin_base.models.user.UserProfile.time_zone" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the time zone, for timing middleware.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="spin_base.models.user.get_upload_path">
+<tt class="descclassname">spin_base.models.user.</tt><tt class="descname">get_upload_path</tt><big>(</big><em>instance</em>, <em>filename</em><big>)</big><a class="headerlink" href="#spin_base.models.user.get_upload_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the path from MEDIA_ROOT where to upload the file</p>
+<dl class="docutils">
+<dt>Kwargs:</dt>
+<dd>instance &#8211; the file instance
+filename &#8211; the name of file</dd>
+<dt>Returns:</dt>
+<dd>string. The path where to save the image</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-spin_base.models.relationship">
+<span id="relationship"></span><h3>2.1.2. Relationship<a class="headerlink" href="#module-spin_base.models.relationship" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="spin_base.models.relationship.Relationship">
+<em class="property">class </em><tt class="descclassname">spin_base.models.relationship.</tt><tt class="descname">Relationship</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/models/relationship.html#Relationship"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.models.relationship.Relationship" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class handles the process of request/response
+involved in user&#8217;s relationship; when a followed user
+is private, he need to approve the relationship.</p>
+<dl class="attribute">
+<dt id="spin_base.models.relationship.Relationship.approved">
+<tt class="descname">approved</tt><em class="property"> = None</em><a class="headerlink" href="#spin_base.models.relationship.Relationship.approved" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bool to approve following requests.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.models.relationship.Relationship.followed">
+<tt class="descname">followed</tt><a class="headerlink" href="#spin_base.models.relationship.Relationship.followed" title="Permalink to this definition">¶</a></dt>
+<dd><p>The user who will receive the request.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.models.relationship.Relationship.follower">
+<tt class="descname">follower</tt><a class="headerlink" href="#spin_base.models.relationship.Relationship.follower" title="Permalink to this definition">¶</a></dt>
+<dd><p>The user who made the request to follow.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="spins">
+<h3>2.1.3. Spins<a class="headerlink" href="#spins" title="Permalink to this headline">¶</a></h3>
+<span class="target" id="module-spin_base.models.spin"></span><dl class="class">
+<dt id="spin_base.models.spin.MultiSpin">
+<em class="property">class </em><tt class="descclassname">spin_base.models.spin.</tt><tt class="descname">MultiSpin</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/models/spin.html#MultiSpin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.models.spin.MultiSpin" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Spin with multimedia content.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.models.spin.Spin">
+<em class="property">class </em><tt class="descclassname">spin_base.models.spin.</tt><tt class="descname">Spin</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/models/spin.html#Spin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.models.spin.Spin" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class represents the shared information by a user.
+The name Spin derives from the spin, it alludes to an
+information cycle: Spin, reSpin</p>
+<dl class="attribute">
+<dt id="spin_base.models.spin.Spin.author">
+<tt class="descname">author</tt><a class="headerlink" href="#spin_base.models.spin.Spin.author" title="Permalink to this definition">¶</a></dt>
+<dd><p>The user who&#8217;s posted the Spin</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.models.spin.Spin.content">
+<tt class="descname">content</tt><em class="property"> = None</em><a class="headerlink" href="#spin_base.models.spin.Spin.content" title="Permalink to this definition">¶</a></dt>
+<dd><p>The text shared in the Spin</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.models.spin.Spin.date">
+<tt class="descname">date</tt><em class="property"> = None</em><a class="headerlink" href="#spin_base.models.spin.Spin.date" title="Permalink to this definition">¶</a></dt>
+<dd><p>The date when the Spin&#8217;s been created</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.models.spin.Spin.is_signaled">
+<tt class="descname">is_signaled</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/spin_base/models/spin.html#Spin.is_signaled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.models.spin.Spin.is_signaled" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.models.spin.Spin.last_modified">
+<tt class="descname">last_modified</tt><em class="property"> = None</em><a class="headerlink" href="#spin_base.models.spin.Spin.last_modified" title="Permalink to this definition">¶</a></dt>
+<dd><p>The date when the Spin&#8217;s been modified for the last time</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.models.spin.Spin.report_number">
+<tt class="descname">report_number</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/spin_base/models/spin.html#Spin.report_number"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.models.spin.Spin.report_number" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.models.spin.Spin.respinned">
+<tt class="descname">respinned</tt><a class="headerlink" href="#spin_base.models.spin.Spin.respinned" title="Permalink to this definition">¶</a></dt>
+<dd><p>The spin which has been respinned, None if the spin is not a respin.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="spin_base.models.spin.get_upload_path">
+<tt class="descclassname">spin_base.models.spin.</tt><tt class="descname">get_upload_path</tt><big>(</big><em>instance</em>, <em>filename</em><big>)</big><a class="reference internal" href="../_modules/spin_base/models/spin.html#get_upload_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.models.spin.get_upload_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the path from MEDIA_ROOT where to upload the file</p>
+<dl class="docutils">
+<dt>Kwargs:</dt>
+<dd>instance: the file instance
+filename: the name of file</dd>
+<dt>Returns:</dt>
+<dd>string. The path where to save the file</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-spin_base.models.comment">
+<span id="comments"></span><h3>2.1.4. Comments<a class="headerlink" href="#module-spin_base.models.comment" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="spin_base.models.comment.Comment">
+<em class="property">class </em><tt class="descclassname">spin_base.models.comment.</tt><tt class="descname">Comment</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/models/comment.html#Comment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.models.comment.Comment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Comments from users to spins</p>
+<dl class="attribute">
+<dt id="spin_base.models.comment.Comment.author">
+<tt class="descname">author</tt><a class="headerlink" href="#spin_base.models.comment.Comment.author" title="Permalink to this definition">¶</a></dt>
+<dd><p>Author of the commente</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.models.comment.Comment.content">
+<tt class="descname">content</tt><em class="property"> = None</em><a class="headerlink" href="#spin_base.models.comment.Comment.content" title="Permalink to this definition">¶</a></dt>
+<dd><p>The comment content</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.models.comment.Comment.date">
+<tt class="descname">date</tt><em class="property"> = None</em><a class="headerlink" href="#spin_base.models.comment.Comment.date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Date when comment was posted</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.models.comment.Comment.is_signaled">
+<tt class="descname">is_signaled</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/spin_base/models/comment.html#Comment.is_signaled"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.models.comment.Comment.is_signaled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:
+True &#8211; if the comment has been reported
+False &#8211; if it&#8217;s not been reported</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.models.comment.Comment.report_number">
+<tt class="descname">report_number</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/spin_base/models/comment.html#Comment.report_number"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.models.comment.Comment.report_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:
+the number of reports</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.models.comment.Comment.spin">
+<tt class="descname">spin</tt><a class="headerlink" href="#spin_base.models.comment.Comment.spin" title="Permalink to this definition">¶</a></dt>
+<dd><p>The commented spin</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-spin_base.models.report">
+<span id="reports"></span><h3>2.1.5. Reports<a class="headerlink" href="#module-spin_base.models.report" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="spin_base.models.report.CommentReport">
+<em class="property">class </em><tt class="descclassname">spin_base.models.report.</tt><tt class="descname">CommentReport</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/models/report.html#CommentReport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.models.report.CommentReport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specific report for Comment.</p>
+<dl class="attribute">
+<dt id="spin_base.models.report.CommentReport.target_comment">
+<tt class="descname">target_comment</tt><a class="headerlink" href="#spin_base.models.report.CommentReport.target_comment" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.models.report.Report">
+<em class="property">class </em><tt class="descclassname">spin_base.models.report.</tt><tt class="descname">Report</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/models/report.html#Report"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.models.report.Report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for reporting user&#8217;s abuses</p>
+<dl class="attribute">
+<dt id="spin_base.models.report.Report.content">
+<tt class="descname">content</tt><em class="property"> = None</em><a class="headerlink" href="#spin_base.models.report.Report.content" title="Permalink to this definition">¶</a></dt>
+<dd><p>Text explaination of report.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.models.report.Report.date">
+<tt class="descname">date</tt><em class="property"> = None</em><a class="headerlink" href="#spin_base.models.report.Report.date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Date when it was submitted.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.models.report.Report.get_target">
+<tt class="descname">get_target</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/spin_base/models/report.html#Report.get_target"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.models.report.Report.get_target" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:
+object. the target which report is referred to.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.models.report.Report.user">
+<tt class="descname">user</tt><a class="headerlink" href="#spin_base.models.report.Report.user" title="Permalink to this definition">¶</a></dt>
+<dd><p>User who submit the report.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.models.report.SpinReport">
+<em class="property">class </em><tt class="descclassname">spin_base.models.report.</tt><tt class="descname">SpinReport</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/models/report.html#SpinReport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.models.report.SpinReport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specific report for Spin.</p>
+<dl class="attribute">
+<dt id="spin_base.models.report.SpinReport.target_spin">
+<tt class="descname">target_spin</tt><a class="headerlink" href="#spin_base.models.report.SpinReport.target_spin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.models.report.UserReport">
+<em class="property">class </em><tt class="descclassname">spin_base.models.report.</tt><tt class="descname">UserReport</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/models/report.html#UserReport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.models.report.UserReport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specific report for UserProfile.</p>
+<dl class="attribute">
+<dt id="spin_base.models.report.UserReport.target_profile">
+<tt class="descname">target_profile</tt><a class="headerlink" href="#spin_base.models.report.UserReport.target_profile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Target profile of a report.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-spin_base.models.style">
+<span id="app-style"></span><h3>2.1.6. App Style<a class="headerlink" href="#module-spin_base.models.style" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="spin_base.models.style.Customization">
+<em class="property">class </em><tt class="descclassname">spin_base.models.style.</tt><tt class="descname">Customization</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/models/style.html#Customization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.models.style.Customization" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class contains the style for the spin app.</p>
+<dl class="attribute">
+<dt id="spin_base.models.style.Customization.background_color">
+<tt class="descname">background_color</tt><em class="property"> = None</em><a class="headerlink" href="#spin_base.models.style.Customization.background_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.models.style.Customization.background_image">
+<tt class="descname">background_image</tt><em class="property"> = None</em><a class="headerlink" href="#spin_base.models.style.Customization.background_image" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.models.style.Customization.nav_inverse">
+<tt class="descname">nav_inverse</tt><em class="property"> = None</em><a class="headerlink" href="#spin_base.models.style.Customization.nav_inverse" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.models.style.Customization.well_color">
+<tt class="descname">well_color</tt><em class="property"> = None</em><a class="headerlink" href="#spin_base.models.style.Customization.well_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>color of well boxes</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2. Models</a><ul>
+<li><a class="reference internal" href="#class-reference">2.1. Class Reference</a><ul>
+<li><a class="reference internal" href="#userprofile">2.1.1. UserProfile</a></li>
+<li><a class="reference internal" href="#module-spin_base.models.relationship">2.1.2. Relationship</a></li>
+<li><a class="reference internal" href="#spins">2.1.3. Spins</a></li>
+<li><a class="reference internal" href="#module-spin_base.models.comment">2.1.4. Comments</a></li>
+<li><a class="reference internal" href="#module-spin_base.models.report">2.1.5. Reports</a></li>
+<li><a class="reference internal" href="#module-spin_base.models.style">2.1.6. App Style</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="intro.html"
+                        title="previous chapter">1. Intro to spin</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="views.html"
+                        title="next chapter">3. Views</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/models.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="views.html" title="3. Views"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="1. Intro to spin"
+             >previous</a> |</li>
+        <li><a href="../index.html">spin: another Twitter clone 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Lorenzo Di Giuseppe.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

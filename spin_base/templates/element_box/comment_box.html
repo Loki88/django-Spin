@@ -1,0 +1,26 @@
+{% load i18n %}
+
+<div class="well">
+	<div class="row-fluid">
+		<div class="span6">
+			<h6>
+				<a href="{% url 'spin:user-profile' spin.author.username %}" id="#{{spin.id}}-{{comment.id}}">
+					{{comment.author.first_name}}&nbsp;{{comment.author.last_name}}@{{comment.author.username}}
+				</a>
+			</h6>
+		</div>
+		<div class="span2 offset4">
+			{% if user.username == comment.author.username %}
+				<h6><a href="{% url 'spin:delete-comment' pk=comment.id %}" class="delete-this" data-name="comment">{% trans 'delete' %}</a></h6>
+			{% else %}
+				<a class="report" data-name="comment" href="{% url 'spin:report-comment' comment=comment.id %}">{% trans 'report abuse' %}</a>
+			{% endif %}
+		</div>
+	</div>
+	<div class="well">
+		{{comment.content}}
+	</div>
+	<div class="span*"> 
+		{{comment.date}}
+	</div>
+</div>

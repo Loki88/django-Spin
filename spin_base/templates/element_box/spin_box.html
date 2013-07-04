@@ -1,0 +1,85 @@
+{% load i18n %}
+{% load tz %}
+
+<div class="row-fluid well spin-box">
+	<h5><a href="{% url 'spin:user-profile' slug=spin.author.username %}" id="{{spin.id}}">
+		{{spin.author.first_name}}&nbsp;{{spin.author.last_name}}@{{spin.author.username}}
+	</a></h5>
+	{% if spin.respins.all|length > 0 %}
+		<h6>{% blocktrans with spin.respins.all|length as num_respins %}ReSpinned {{num_respins}} time{{num_respins|pluralize}}{% endblocktrans %}</h6>
+	{% endif %}
+	{% if spin.respinned %}
+		{% with spin.respinned.author as orig_spin_author %}
+		<h6>{% trans 'ReSpinned from:' %}&nbsp;<a href="{% url 'spin:user-profile' slug=orig_spin_author.username %}">{{orig_spin_author.first_name}}&nbsp;{{orig_spin_author.last_name}}@{{orig_spin_author.username}}</a></h6>
+		{% endwith %}
+	{% endif %}
+	<div class="row-fluid">{% trans 'Published' %}: 
+		{{spin.date|localtime}}
+	</div>
+	<div class="well spin-content">{{spin.content}}</div>
+	{% if spin.multispin %}
+		<div class="row-fluid">
+			<div class="span6">
+				{% if spin.multispin.multimedia_path.name|slice:'-5:-4' == '.' %}
+					<img src="{{MEDIA_URL}}{{spin.multispin.multimedia_path.name|slice:":-5"}}resized_{{spin.multispin.multimedia_path.name|slice:"-5:"}}" class="img-polaroid image" data-full-size="{{spin.multispin.multimedia_path.url}}" />
+				{% else %}
+					<img src="{{MEDIA_URL}}{{spin.multispin.multimedia_path.name|slice:":-4"}}resized_{{spin.multispin.multimedia_path.name|slice:"-4:"}}" class="img-polaroid image" data-full-size="{{spin.multispin.multimedia_path.url}}" />
+				{% endif %}
+			</div>
+			<div class="span6">
+
+			</div>
+		</div>
+	{% elif spin.respinned.multispin %}
+		<div class="row-fluid">
+			<div class="span6">
+				{% if spin.respinned.multispin.multimedia_path.name|slice:'-5:-4' == '.' %}
+					<img src="{{MEDIA_URL}}{{spin.respinned.multispin.multimedia_path.name|slice:":-5"}}resized_{{spin.respinned.multispin.multimedia_path.name|slice:"-5:"}}" class="img-polaroid image" data-full-size="{{spin.multispin.multimedia_path.url}}" />
+				{% else %}
+					<img src="{{spin.respinned.multispin.multimedia_path.url|slice:":-4"}}resized_{{spin.respinned.multispin.multimedia_path.url|slice:"-4:"}}" data-full-size="{{spin.respinned.multispin.multimedia_path.url}}" class="img-polaroid image" />
+				{% endif %}
+			</div>
+			<div class="span6">
+
+			</div>
+		</div>
+	{% endif %}
+	<div class="row-fluid">
+		<div class="btn-group span*">
+			{% if user.username == spin.author.username %}
+				<button class="btn edit-spin" data-spin="{{spin.id}}" data-to='{% url 'spin:edit-spin' pk=spin.id %}'><i class="icon-edit"></i>{% trans 'Edit' %}</button>
+				<a class="delete-this" data-name="spin" href="{% url 'spin:delete-spin' spin_id=spin.id %}"><button class="btn delete-spin"  data-spin="{{spin.id}}">{% trans 'Delete' %}</button></a>
+			{% else %}
+				<a href="{% url 'spin:respin' spin_id=spin.id %}"><button class="btn re-spin" data-spin="{{spin.id}}">Re-Spin</button></a>
+			{% endif %}
+			<button class="btn comment-spin" data-spin="{{spin.id}}">{% trans 'Comment' %}</button>
+			<div class="btn-group">
+			  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+			    {% trans 'Other Actions' %}
+			    <span class="caret"></span>
+			  </a>
+			  <ul class="dropdown-menu">
+			  	{% if not full_size %}<li><a href="{% url 'spin:spin' spin.id %}">{% trans 'See full size' %}</a></li>{% endif %}
+			  	{% if user.username != spin.author.username %}<li><a data-name="spin" class="report" href="{% url 'spin:report-spin' spin=spin.id %}">{% trans 'Report to admin' %}</a></li>{% endif %}
+			  </ul>
+			</div>
+			{% include 'forms/comment_form.html' %}
+		</div>
+	</div>
+	{% with spin.commented.all|length as comments_count %}
+		{% if comments_count > 0 %}
+			<br/>
+			<div class="row-fluid comment-toggle">
+				<div class="span3 btn btn-block btn-primary display-comment-button">
+					{{comments_count}}&nbsp;{% trans 'comments' %}
+				</div>
+			</div>
+			<div class="row-fluid comment-list">
+				<hr></hr>
+				{% for comment in spin.commented.all %}
+					{% include 'element_box/comment_box.html' %}
+				{% endfor %}
+			</div>
+		{% endif %}
+	{% endwith %}
+</div>

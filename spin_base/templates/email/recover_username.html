@@ -1,0 +1,17 @@
+{% extends 'spin_base/home_base.html' %}
+{% load i18n %}
+
+{% block content %}
+	<div class="row-fluid">
+		<h4>{% trans 'Username recovery message' %}</h4>
+	</div>
+	<div class="row-fluid well">
+		<p>{% blocktrans %}{{lost_user.name}} your username is written below, be carefull, don't lost it 	again.<br/>
+			Username = {{lost_user.username}}
+			To login the site, click on the below link:{% endblocktrans %}</p>
+			<a href="{{server_url}}{% url 'spin:login' %}" />
+	</div>
+	<div class="row-fluid well">
+		{% blocktrans %}If you should encounter some problem, contact us.{% endblocktrans %}
+	</div>
+{% endblock %}

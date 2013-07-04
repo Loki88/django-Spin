@@ -1,0 +1,39 @@
+{% load i18n %}
+{% block extrahead %}
+	{{login_form.media}}
+{% endblock %}
+
+<form method="post" action="{% url 'spin:login' %}" class="spin-form">
+	<fieldset>
+		<legend>Login</legend>
+		{% if login_form.non_field_errors %}
+			<div class="control-group error">
+				<span class="help-inline">{{login_form.non_field_errors}}</span>
+			</div>
+		{% endif %}
+		{% csrf_token %}
+		<div class="control-group span*">
+			<label for="inputUsername">{% trans 'Username' %}</label>
+			<div class="controls">
+				{{ login_form.username }}
+			</div>
+		</div>
+		<div class="control-group span*">
+			<label for="inputPassword">Password</label>
+			<div class="controls">
+				{{ login_form.password }}
+			</div>
+		</div>
+		<div class="control-group span*">
+			<div class="controls">
+				<label class="checkbox">
+					{{ login_form.remember }}{% trans 'Remember me' %}
+				</label>
+				<input type="submit" class="btn" value="{% trans 'Sign in' %}"/>
+			</div>
+		</div>
+	</fieldset>
+	<div class="row-fluid">
+		<a href="{% url 'spin:password-recovery' %}">{% trans 'Have you lost your data? Get them back' %}</a>
+	</div>
+</form>

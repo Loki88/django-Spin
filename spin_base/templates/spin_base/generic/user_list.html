@@ -1,0 +1,30 @@
+{% extends 'spin_base/user_home.html' %}
+{% load i18n %}
+
+{% block body %}
+	<h4>{{list_title}}</h4>
+	<div class="btn-toolbar">
+		<div class="btn-group">
+			{% if page_obj.has_previous %}
+				<a href="?page={{page_obj.previous_page_number}}"><button class="btn"><i class="icon-arrow-left"></i>&nbsp;{% trans 'Previous' %}</button></a>
+			{% endif %}
+			{% for page_number in paginator.page_range %}
+				{% if page_number >= page_obj.number|add:"-5" or page_number >= page_obj.number|add:"5" %}
+					{% if page_number != page_obj.number %}
+						<a href="?page={{page_number}}"><button class="btn">{{page_number}}</button></a>
+					{% else %}
+						<button class="btn disabled">{{page_number}}</button>
+					{% endif %}
+				{% endif %} 
+			{% endfor %}
+			{% if page_obj.has_next %}
+				<a href="?page={{page_obj.next_page_number}}"><button class="btn">{% trans 'Next' %}<i class="icon-arrow-right">&nbsp;</i></button></a>
+			{% endif %}
+		</div>
+	</div>
+	{% with user.userprofile as userprofile %}
+		{% for profile in user_list %}	
+			{% include 'element_box/user_box.html' %}
+		{% endfor %}
+	{% endwith %}
+{% endblock %}

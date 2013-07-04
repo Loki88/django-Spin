@@ -1,0 +1,795 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3. Views &mdash; spin: another Twitter clone 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="spin: another Twitter clone 1.0 documentation" href="../index.html" />
+    <link rel="next" title="4. Other Components" href="others.html" />
+    <link rel="prev" title="2. Models" href="models.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="others.html" title="4. Other Components"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="models.html" title="2. Models"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">spin: another Twitter clone 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="views">
+<h1>3. Views<a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="accounting-views">
+<h2>3.1. Accounting views<a class="headerlink" href="#accounting-views" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="spin_base.views.accounting.AccountDelete">
+<em class="property">class </em><tt class="descclassname">spin_base.views.accounting.</tt><tt class="descname">AccountDelete</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.AccountDelete" title="Permalink to this definition">¶</a></dt>
+<dd><p>This views handles the request to delete a user account.
+It&#8217;s only accessible by logged user.</p>
+<dl class="method">
+<dt id="spin_base.views.accounting.AccountDelete.delete">
+<tt class="descname">delete</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.AccountDelete.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method gets the request to delete and calls the parent delete
+after the removement of the user images.</p>
+<dl class="docutils">
+<dt>Throw:</dt>
+<dd>OSError: if the images is not found</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.AccountDelete.dispatch">
+<tt class="descname">dispatch</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.AccountDelete.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.AccountDelete.get">
+<tt class="descname">get</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.AccountDelete.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.AccountDelete.get_context_data">
+<tt class="descname">get_context_data</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.AccountDelete.get_context_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.AccountDelete.get_object">
+<tt class="descname">get_object</tt><big>(</big><big>)</big><a class="headerlink" href="#spin_base.views.accounting.AccountDelete.get_object" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.AccountDelete.get_success_url">
+<tt class="descname">get_success_url</tt><big>(</big><big>)</big><a class="headerlink" href="#spin_base.views.accounting.AccountDelete.get_success_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.accounting.AccountView">
+<em class="property">class </em><tt class="descclassname">spin_base.views.accounting.</tt><tt class="descname">AccountView</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.AccountView" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method permits the update of user informations.
+It handles the timezones, so the user can report dates and time
+to his locale.</p>
+<dl class="method">
+<dt id="spin_base.views.accounting.AccountView.dispatch">
+<tt class="descname">dispatch</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.AccountView.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.views.accounting.AccountView.form_class">
+<tt class="descname">form_class</tt><a class="headerlink" href="#spin_base.views.accounting.AccountView.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">UserProfileForm</span></tt></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.AccountView.form_valid">
+<tt class="descname">form_valid</tt><big>(</big><em>form</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.AccountView.form_valid" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method responds to form valid <em>event</em> and resizes the user image if
+modified.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.AccountView.get_context_data">
+<tt class="descname">get_context_data</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.AccountView.get_context_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.AccountView.get_object">
+<tt class="descname">get_object</tt><big>(</big><big>)</big><a class="headerlink" href="#spin_base.views.accounting.AccountView.get_object" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.AccountView.get_success_url">
+<tt class="descname">get_success_url</tt><big>(</big><big>)</big><a class="headerlink" href="#spin_base.views.accounting.AccountView.get_success_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.views.accounting.AccountView.template_name">
+<tt class="descname">template_name</tt><em class="property"> = 'spin_base/accounting/account.html'</em><a class="headerlink" href="#spin_base.views.accounting.AccountView.template_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.accounting.ActivationView">
+<em class="property">class </em><tt class="descclassname">spin_base.views.accounting.</tt><tt class="descname">ActivationView</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.ActivationView" title="Permalink to this definition">¶</a></dt>
+<dd><p>This view permits the activation of UserProfile.</p>
+<dl class="docutils">
+<dt>Raises:</dt>
+<dd>404 errors if the calls doesn&#8217;t fit some pre-requisites</dd>
+</dl>
+<dl class="method">
+<dt id="spin_base.views.accounting.ActivationView.dispatch">
+<tt class="descname">dispatch</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.ActivationView.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.ActivationView.get_redirect_url">
+<tt class="descname">get_redirect_url</tt><big>(</big><big>)</big><a class="headerlink" href="#spin_base.views.accounting.ActivationView.get_redirect_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.accounting.LoginView">
+<em class="property">class </em><tt class="descclassname">spin_base.views.accounting.</tt><tt class="descname">LoginView</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.LoginView" title="Permalink to this definition">¶</a></dt>
+<dd><p>View that handles the login process</p>
+<dl class="method">
+<dt id="spin_base.views.accounting.LoginView.dispatch">
+<tt class="descname">dispatch</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.LoginView.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.views.accounting.LoginView.form_class">
+<tt class="descname">form_class</tt><a class="headerlink" href="#spin_base.views.accounting.LoginView.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">LoginForm</span></tt></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.LoginView.form_valid">
+<tt class="descname">form_valid</tt><big>(</big><em>form</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.LoginView.form_valid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.LoginView.get_context_data">
+<tt class="descname">get_context_data</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.LoginView.get_context_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.LoginView.get_success_url">
+<tt class="descname">get_success_url</tt><big>(</big><big>)</big><a class="headerlink" href="#spin_base.views.accounting.LoginView.get_success_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.LoginView.post">
+<tt class="descname">post</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.LoginView.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>The post is called when login form is submitted.
+It validates the requests, then try the login and sets
+some session informations, such <em>spin_timezone</em> for user .</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.accounting.LogoutView">
+<em class="property">class </em><tt class="descclassname">spin_base.views.accounting.</tt><tt class="descname">LogoutView</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.LogoutView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destroys the session and return to home, calling the django auth
+logout function</p>
+<dl class="method">
+<dt id="spin_base.views.accounting.LogoutView.dispatch">
+<tt class="descname">dispatch</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.LogoutView.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.LogoutView.get_redirect_url">
+<tt class="descname">get_redirect_url</tt><big>(</big><big>)</big><a class="headerlink" href="#spin_base.views.accounting.LogoutView.get_redirect_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.views.accounting.LogoutView.permanent">
+<tt class="descname">permanent</tt><em class="property"> = False</em><a class="headerlink" href="#spin_base.views.accounting.LogoutView.permanent" title="Permalink to this definition">¶</a></dt>
+<dd><p>If True sets a permanent redirect.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.accounting.PasswordRecovery">
+<em class="property">class </em><tt class="descclassname">spin_base.views.accounting.</tt><tt class="descname">PasswordRecovery</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.PasswordRecovery" title="Permalink to this definition">¶</a></dt>
+<dd><p>This view sends an email to recover the userprofile password.
+It requires the username, then sends email and send a link with
+limited lifetime to user.</p>
+<dl class="attribute">
+<dt id="spin_base.views.accounting.PasswordRecovery.context_object_name">
+<tt class="descname">context_object_name</tt><em class="property"> = 'recover'</em><a class="headerlink" href="#spin_base.views.accounting.PasswordRecovery.context_object_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.views.accounting.PasswordRecovery.form_class">
+<tt class="descname">form_class</tt><a class="headerlink" href="#spin_base.views.accounting.PasswordRecovery.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">UsernameForm</span></tt></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.PasswordRecovery.form_valid">
+<tt class="descname">form_valid</tt><big>(</big><em>form</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.PasswordRecovery.form_valid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.PasswordRecovery.get_success_url">
+<tt class="descname">get_success_url</tt><big>(</big><big>)</big><a class="headerlink" href="#spin_base.views.accounting.PasswordRecovery.get_success_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.PasswordRecovery.post">
+<tt class="descname">post</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.PasswordRecovery.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Args:
+request: the WSGI request object
+args:
+kwargs:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.views.accounting.PasswordRecovery.recovery_key">
+<tt class="descname">recovery_key</tt><em class="property"> = None</em><a class="headerlink" href="#spin_base.views.accounting.PasswordRecovery.recovery_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.PasswordRecovery.send_recovery_mail">
+<tt class="descname">send_recovery_mail</tt><big>(</big><em>user</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.PasswordRecovery.send_recovery_mail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.views.accounting.PasswordRecovery.template_name">
+<tt class="descname">template_name</tt><em class="property"> = 'forms/lost_password.html'</em><a class="headerlink" href="#spin_base.views.accounting.PasswordRecovery.template_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.accounting.RegistrationView">
+<em class="property">class </em><tt class="descclassname">spin_base.views.accounting.</tt><tt class="descname">RegistrationView</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.RegistrationView" title="Permalink to this definition">¶</a></dt>
+<dd><p>This view handles the registration of a user, creating a profile.
+When the user is registred it sends an email with activation link.</p>
+<dl class="method">
+<dt id="spin_base.views.accounting.RegistrationView.dispatch">
+<tt class="descname">dispatch</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.RegistrationView.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.views.accounting.RegistrationView.form_class">
+<tt class="descname">form_class</tt><a class="headerlink" href="#spin_base.views.accounting.RegistrationView.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">RegistrationForm</span></tt></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.RegistrationView.form_valid">
+<tt class="descname">form_valid</tt><big>(</big><em>form</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.RegistrationView.form_valid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.RegistrationView.get_context_data">
+<tt class="descname">get_context_data</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.RegistrationView.get_context_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.RegistrationView.get_success_url">
+<tt class="descname">get_success_url</tt><big>(</big><big>)</big><a class="headerlink" href="#spin_base.views.accounting.RegistrationView.get_success_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.views.accounting.RegistrationView.model">
+<tt class="descname">model</tt><a class="headerlink" href="#spin_base.views.accounting.RegistrationView.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">UserProfile</span></tt></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.RegistrationView.send_activation_mail">
+<tt class="descname">send_activation_mail</tt><big>(</big><em>user</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.RegistrationView.send_activation_mail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.accounting.SetNewPassword">
+<em class="property">class </em><tt class="descclassname">spin_base.views.accounting.</tt><tt class="descname">SetNewPassword</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.SetNewPassword" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is callable only if has been requested recovery of password.
+This validates the url, then a cookie, timestamp-signed and crypted.
+Only a user which satisfies thes requisites can set a new password.</p>
+<dl class="method">
+<dt id="spin_base.views.accounting.SetNewPassword.dispatch">
+<tt class="descname">dispatch</tt><big>(</big><em>request</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.SetNewPassword.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.views.accounting.SetNewPassword.form_class">
+<tt class="descname">form_class</tt><a class="headerlink" href="#spin_base.views.accounting.SetNewPassword.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">PasswordForm</span></tt></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.SetNewPassword.form_valid">
+<tt class="descname">form_valid</tt><big>(</big><em>form</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.SetNewPassword.form_valid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.SetNewPassword.get_context_data">
+<tt class="descname">get_context_data</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.SetNewPassword.get_context_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.SetNewPassword.get_success_url">
+<tt class="descname">get_success_url</tt><big>(</big><big>)</big><a class="headerlink" href="#spin_base.views.accounting.SetNewPassword.get_success_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.accounting.UsernameRecovery">
+<em class="property">class </em><tt class="descclassname">spin_base.views.accounting.</tt><tt class="descname">UsernameRecovery</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.UsernameRecovery" title="Permalink to this definition">¶</a></dt>
+<dd><p>This view sends an email to recover the username.
+It requires the email address, then sends an email with
+the username.</p>
+<dl class="attribute">
+<dt id="spin_base.views.accounting.UsernameRecovery.context_object_name">
+<tt class="descname">context_object_name</tt><em class="property"> = 'recover'</em><a class="headerlink" href="#spin_base.views.accounting.UsernameRecovery.context_object_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.views.accounting.UsernameRecovery.form_class">
+<tt class="descname">form_class</tt><a class="headerlink" href="#spin_base.views.accounting.UsernameRecovery.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">EmailForm</span></tt></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.UsernameRecovery.form_valid">
+<tt class="descname">form_valid</tt><big>(</big><em>form</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.UsernameRecovery.form_valid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.UsernameRecovery.get_success_url">
+<tt class="descname">get_success_url</tt><big>(</big><big>)</big><a class="headerlink" href="#spin_base.views.accounting.UsernameRecovery.get_success_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.accounting.UsernameRecovery.send_recovery_mail">
+<tt class="descname">send_recovery_mail</tt><big>(</big><em>user</em><big>)</big><a class="headerlink" href="#spin_base.views.accounting.UsernameRecovery.send_recovery_mail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.views.accounting.UsernameRecovery.template_name">
+<tt class="descname">template_name</tt><em class="property"> = 'forms/lost_username.html'</em><a class="headerlink" href="#spin_base.views.accounting.UsernameRecovery.template_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="spin-views">
+<h2>3.2. Spin Views<a class="headerlink" href="#spin-views" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="spin_base.views.spin.CommentSpin">
+<em class="property">class </em><tt class="descclassname">spin_base.views.spin.</tt><tt class="descname">CommentSpin</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.spin.CommentSpin" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class permits to add a comment to a spin.</p>
+<dl class="attribute">
+<dt id="spin_base.views.spin.CommentSpin.form_class">
+<tt class="descname">form_class</tt><a class="headerlink" href="#spin_base.views.spin.CommentSpin.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">CommentForm</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.spin.CreateSpin">
+<em class="property">class </em><tt class="descclassname">spin_base.views.spin.</tt><tt class="descname">CreateSpin</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.spin.CreateSpin" title="Permalink to this definition">¶</a></dt>
+<dd><p>View that handles the creation of a Spin.</p>
+<dl class="attribute">
+<dt id="spin_base.views.spin.CreateSpin.form_class">
+<tt class="descname">form_class</tt><a class="headerlink" href="#spin_base.views.spin.CreateSpin.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">SpinForm</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.spin.DeleteComment">
+<em class="property">class </em><tt class="descclassname">spin_base.views.spin.</tt><tt class="descname">DeleteComment</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.spin.DeleteComment" title="Permalink to this definition">¶</a></dt>
+<dd><p>View that deletes a comment.</p>
+<dl class="attribute">
+<dt id="spin_base.views.spin.DeleteComment.model">
+<tt class="descname">model</tt><a class="headerlink" href="#spin_base.views.spin.DeleteComment.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">Comment</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.spin.DeleteSpin">
+<em class="property">class </em><tt class="descclassname">spin_base.views.spin.</tt><tt class="descname">DeleteSpin</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.spin.DeleteSpin" title="Permalink to this definition">¶</a></dt>
+<dd><p>View that deletes spins.</p>
+<dl class="attribute">
+<dt id="spin_base.views.spin.DeleteSpin.model">
+<tt class="descname">model</tt><a class="headerlink" href="#spin_base.views.spin.DeleteSpin.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">Spin</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.spin.DetailSpin">
+<em class="property">class </em><tt class="descclassname">spin_base.views.spin.</tt><tt class="descname">DetailSpin</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.spin.DetailSpin" title="Permalink to this definition">¶</a></dt>
+<dd><p>This view renders a single spin in detail with all its comments.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.spin.EditSpin">
+<em class="property">class </em><tt class="descclassname">spin_base.views.spin.</tt><tt class="descname">EditSpin</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.spin.EditSpin" title="Permalink to this definition">¶</a></dt>
+<dd><p>View that permits to modify a spin.</p>
+<dl class="attribute">
+<dt id="spin_base.views.spin.EditSpin.form_class">
+<tt class="descname">form_class</tt><a class="headerlink" href="#spin_base.views.spin.EditSpin.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">SpinForm</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.views.spin.EditSpin.model">
+<tt class="descname">model</tt><a class="headerlink" href="#spin_base.views.spin.EditSpin.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">Spin</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.spin.PublicSpin">
+<em class="property">class </em><tt class="descclassname">spin_base.views.spin.</tt><tt class="descname">PublicSpin</tt><big>(</big><em>**kwargs</em><big>)</big><a class="headerlink" href="#spin_base.views.spin.PublicSpin" title="Permalink to this definition">¶</a></dt>
+<dd><p>View that renders a list of latest public spins.</p>
+<dl class="attribute">
+<dt id="spin_base.views.spin.PublicSpin.model">
+<tt class="descname">model</tt><a class="headerlink" href="#spin_base.views.spin.PublicSpin.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">Spin</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-spin_base.views.customization">
+<span id="customization-views"></span><h2>3.3. Customization Views<a class="headerlink" href="#module-spin_base.views.customization" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="spin_base.views.customization.CreateCustomizationView">
+<em class="property">class </em><tt class="descclassname">spin_base.views.customization.</tt><tt class="descname">CreateCustomizationView</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/customization.html#CreateCustomizationView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.customization.CreateCustomizationView" title="Permalink to this definition">¶</a></dt>
+<dd><p>This view creates a customization look for the app.</p>
+<dl class="attribute">
+<dt id="spin_base.views.customization.CreateCustomizationView.form_class">
+<tt class="descname">form_class</tt><a class="headerlink" href="#spin_base.views.customization.CreateCustomizationView.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">CustomizeForm</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.views.customization.CreateCustomizationView.model">
+<tt class="descname">model</tt><a class="headerlink" href="#spin_base.views.customization.CreateCustomizationView.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">Customization</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.customization.CustomizationView">
+<em class="property">class </em><tt class="descclassname">spin_base.views.customization.</tt><tt class="descname">CustomizationView</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/customization.html#CustomizationView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.customization.CustomizationView" title="Permalink to this definition">¶</a></dt>
+<dd><p>This view dispatches the requests for update and create.
+It look for a present customization, if not present, calls CreateCustomizationView, else UpdateCustomizationView.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.customization.RestoreCustomization">
+<em class="property">class </em><tt class="descclassname">spin_base.views.customization.</tt><tt class="descname">RestoreCustomization</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/customization.html#RestoreCustomization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.customization.RestoreCustomization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the app look.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.customization.UpdateCustomizationView">
+<em class="property">class </em><tt class="descclassname">spin_base.views.customization.</tt><tt class="descname">UpdateCustomizationView</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/customization.html#UpdateCustomizationView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.customization.UpdateCustomizationView" title="Permalink to this definition">¶</a></dt>
+<dd><p>This view updates the user customized look for the app.</p>
+<dl class="attribute">
+<dt id="spin_base.views.customization.UpdateCustomizationView.form_class">
+<tt class="descname">form_class</tt><a class="headerlink" href="#spin_base.views.customization.UpdateCustomizationView.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">CustomizeForm</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.views.customization.UpdateCustomizationView.model">
+<tt class="descname">model</tt><a class="headerlink" href="#spin_base.views.customization.UpdateCustomizationView.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">Customization</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-spin_base.views.generic">
+<span id="generic-views"></span><h2>3.4. Generic Views<a class="headerlink" href="#module-spin_base.views.generic" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="spin_base.views.generic.FollowersList">
+<em class="property">class </em><tt class="descclassname">spin_base.views.generic.</tt><tt class="descname">FollowersList</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/generic.html#FollowersList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.generic.FollowersList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays user&#8217;s followers.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.generic.FollowingList">
+<em class="property">class </em><tt class="descclassname">spin_base.views.generic.</tt><tt class="descname">FollowingList</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/generic.html#FollowingList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.generic.FollowingList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays user&#8217;s followings.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.generic.HomeView">
+<em class="property">class </em><tt class="descclassname">spin_base.views.generic.</tt><tt class="descname">HomeView</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/generic.html#HomeView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.generic.HomeView" title="Permalink to this definition">¶</a></dt>
+<dd><p>This view displays home page. If user is authenticated this redirects to
+following and followers&#8217; ribbits page, else this shows the home page with
+login form and registration one.</p>
+<dl class="attribute">
+<dt id="spin_base.views.generic.HomeView.template_name">
+<tt class="descname">template_name</tt><em class="property"> = 'spin_base/home_base.html'</em><a class="headerlink" href="#spin_base.views.generic.HomeView.template_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class attribute which defines the page to display in response to a user call.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.generic.ListControl">
+<em class="property">class </em><tt class="descclassname">spin_base.views.generic.</tt><tt class="descname">ListControl</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/generic.html#ListControl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.generic.ListControl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility class that defines the base list actions for followers and followings lists.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.generic.PublicProfiles">
+<em class="property">class </em><tt class="descclassname">spin_base.views.generic.</tt><tt class="descname">PublicProfiles</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/generic.html#PublicProfiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.generic.PublicProfiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>This view displays the public user profiles, so the user can start following someone.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.generic.UserHomeView">
+<em class="property">class </em><tt class="descclassname">spin_base.views.generic.</tt><tt class="descname">UserHomeView</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/generic.html#UserHomeView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.generic.UserHomeView" title="Permalink to this definition">¶</a></dt>
+<dd><p>This view displays the home for authenticated users.
+The home shows the list of latest followers&#8217; spins.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-spin_base.views.relationship_control">
+<span id="relationship-views"></span><h2>3.5. Relationship Views<a class="headerlink" href="#module-spin_base.views.relationship_control" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="spin_base.views.relationship_control.AddBlock">
+<em class="property">class </em><tt class="descclassname">spin_base.views.relationship_control.</tt><tt class="descname">AddBlock</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/relationship_control.html#AddBlock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.relationship_control.AddBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class manages adding block to user profile.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.relationship_control.ApproveFollowing">
+<em class="property">class </em><tt class="descclassname">spin_base.views.relationship_control.</tt><tt class="descname">ApproveFollowing</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/relationship_control.html#ApproveFollowing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.relationship_control.ApproveFollowing" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class permits private users to approve the following requests.
+If a user wants to disapprove, he should call StopFollow.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.relationship_control.Follow">
+<em class="property">class </em><tt class="descclassname">spin_base.views.relationship_control.</tt><tt class="descname">Follow</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/relationship_control.html#Follow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.relationship_control.Follow" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class permits user to follow another one or to ask following.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.relationship_control.RemoveBlock">
+<em class="property">class </em><tt class="descclassname">spin_base.views.relationship_control.</tt><tt class="descname">RemoveBlock</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/relationship_control.html#RemoveBlock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.relationship_control.RemoveBlock" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class manages removing block to user profile.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.relationship_control.StopFollow">
+<em class="property">class </em><tt class="descclassname">spin_base.views.relationship_control.</tt><tt class="descname">StopFollow</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/relationship_control.html#StopFollow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.relationship_control.StopFollow" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class removes the following relationship from one side of this one.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-spin_base.views.reporting">
+<span id="reporting-views"></span><h2>3.6. Reporting Views<a class="headerlink" href="#module-spin_base.views.reporting" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="spin_base.views.reporting.ReportCommentView">
+<em class="property">class </em><tt class="descclassname">spin_base.views.reporting.</tt><tt class="descname">ReportCommentView</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/reporting.html#ReportCommentView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.reporting.ReportCommentView" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="spin_base.views.reporting.ReportCommentView.form_class">
+<tt class="descname">form_class</tt><a class="headerlink" href="#spin_base.views.reporting.ReportCommentView.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">ReportCommentForm</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.views.reporting.ReportCommentView.model">
+<tt class="descname">model</tt><a class="headerlink" href="#spin_base.views.reporting.ReportCommentView.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">CommentReport</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.reporting.ReportSpinView">
+<em class="property">class </em><tt class="descclassname">spin_base.views.reporting.</tt><tt class="descname">ReportSpinView</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/reporting.html#ReportSpinView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.reporting.ReportSpinView" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="spin_base.views.reporting.ReportSpinView.form_class">
+<tt class="descname">form_class</tt><a class="headerlink" href="#spin_base.views.reporting.ReportSpinView.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">ReportSpinForm</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.views.reporting.ReportSpinView.model">
+<tt class="descname">model</tt><a class="headerlink" href="#spin_base.views.reporting.ReportSpinView.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">SpinReport</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="spin_base.views.reporting.ReportUserView">
+<em class="property">class </em><tt class="descclassname">spin_base.views.reporting.</tt><tt class="descname">ReportUserView</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/reporting.html#ReportUserView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.reporting.ReportUserView" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="spin_base.views.reporting.ReportUserView.form_class">
+<tt class="descname">form_class</tt><a class="headerlink" href="#spin_base.views.reporting.ReportUserView.form_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">ReportUserForm</span></tt></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="spin_base.views.reporting.ReportUserView.model">
+<tt class="descname">model</tt><a class="headerlink" href="#spin_base.views.reporting.ReportUserView.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <tt class="xref py py-class docutils literal"><span class="pre">UserReport</span></tt></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-spin_base.views.respin">
+<span id="respin-views"></span><h2>3.7. Respin Views<a class="headerlink" href="#module-spin_base.views.respin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="spin_base.views.respin.ReSpinView">
+<em class="property">class </em><tt class="descclassname">spin_base.views.respin.</tt><tt class="descname">ReSpinView</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/respin.html#ReSpinView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.respin.ReSpinView" title="Permalink to this definition">¶</a></dt>
+<dd><p>This view handles the respin operation.
+It implements only the dispatch method, which contains the logic of the repin.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-spin_base.views.search">
+<span id="searching-views"></span><h2>3.8. Searching Views<a class="headerlink" href="#module-spin_base.views.search" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="spin_base.views.search.Search">
+<em class="property">class </em><tt class="descclassname">spin_base.views.search.</tt><tt class="descname">Search</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/search.html#Search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.search.Search" title="Permalink to this definition">¶</a></dt>
+<dd><p>View that implements the search operations, including tag search.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-spin_base.views.user">
+<span id="user-views"></span><h2>3.9. User Views<a class="headerlink" href="#module-spin_base.views.user" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="spin_base.views.user.UserDetail">
+<em class="property">class </em><tt class="descclassname">spin_base.views.user.</tt><tt class="descname">UserDetail</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/user.html#UserDetail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.user.UserDetail" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class renders a generic user&#8217;s profile, managing the different users that could visit this one.</p>
+<dl class="method">
+<dt id="spin_base.views.user.UserDetail.get_context_data">
+<tt class="descname">get_context_data</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="../_modules/spin_base/views/user.html#UserDetail.get_context_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.user.UserDetail.get_context_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the context needed for correct rendering of user&#8217;s profile page.
+It controls all the possible relations between two users.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="spin_base.views.user.UserDetail.get_private_user_requests">
+<tt class="descname">get_private_user_requests</tt><big>(</big><big>)</big><a class="reference internal" href="../_modules/spin_base/views/user.html#UserDetail.get_private_user_requests"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spin_base.views.user.UserDetail.get_private_user_requests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides waiting requests to follow.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3. Views</a><ul>
+<li><a class="reference internal" href="#accounting-views">3.1. Accounting views</a></li>
+<li><a class="reference internal" href="#spin-views">3.2. Spin Views</a></li>
+<li><a class="reference internal" href="#module-spin_base.views.customization">3.3. Customization Views</a></li>
+<li><a class="reference internal" href="#module-spin_base.views.generic">3.4. Generic Views</a></li>
+<li><a class="reference internal" href="#module-spin_base.views.relationship_control">3.5. Relationship Views</a></li>
+<li><a class="reference internal" href="#module-spin_base.views.reporting">3.6. Reporting Views</a></li>
+<li><a class="reference internal" href="#module-spin_base.views.respin">3.7. Respin Views</a></li>
+<li><a class="reference internal" href="#module-spin_base.views.search">3.8. Searching Views</a></li>
+<li><a class="reference internal" href="#module-spin_base.views.user">3.9. User Views</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="models.html"
+                        title="previous chapter">2. Models</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="others.html"
+                        title="next chapter">4. Other Components</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/views.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="others.html" title="4. Other Components"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="models.html" title="2. Models"
+             >previous</a> |</li>
+        <li><a href="../index.html">spin: another Twitter clone 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Lorenzo Di Giuseppe.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

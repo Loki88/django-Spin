@@ -1,0 +1,159 @@
+{% extends 'spin_base/user_home.html' %}
+{% load i18n %}
+{% load cache %}
+
+{% block extrahead %}
+	{{block.super}}
+	<script type="text/javascript" src="{{ STATIC_URL }}js/carousel-image.js"></script>
+{% endblock %}
+
+{% block user-info %}
+	{% if user.userprofile.private and user.username == profile.username and requests|length > 0%}
+		<div class="well">
+			<h4>{% trans "You've got some requests:" %}</h4>
+			{% for notification in requests %}
+				<div class="well">
+					<div class="row-fluid">
+						<div class="span6">
+							<a href="{% url 'spin:user-profile' notification.follower.username">{{notification.follower.username}}</a>
+							{% trans "wants to follow you" %}.
+						</div>
+						<div class="span6">
+						    <div class="btn-group">
+							    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+							   		{% trans 'Actions' %}
+							    	<span class="caret"></span>
+							    </a>
+							    <ul class="dropdown-menu">
+							    	<li><a tabindex="-1" href="{% url 'spin:user-approve' username=notification.follower.username method='accept' %}">{% trans 'Accept' %}</a></li>
+							    	<li><a tabindex="-1" href="{% url 'spin:user-approve' username=notification.follower.username method='reject' %}">{% trans 'Reject' %}</a></li>
+							    </ul>
+						    </div>
+						</div>
+				    </div>
+				</div>
+			{% endfor %}
+		</div>
+	{% endif %}
+{% endblock %}
+
+
+
+{% block body %}
+	
+	<div id="image-carousel" class="row-fluid carousel slide modal-carousel">
+	    <!-- Carousel items -->
+	    <div class="carousel-inner">
+	    	{% for media in user_media %}
+			    <div class="item" data-src="{{media.multispin.multimedia_path.url}}">
+			    </div>
+			{% endfor %}
+	    </div>
+	    <!-- Carousel nav -->
+	    <a class="carousel-control left" href="image-carousel" data-slide="prev">&lsaquo;</a>
+	    <a class="carousel-control right" href="image-carousel" data-slide="next">&rsaquo;</a>
+    </div>
+	<div class="row-fluid well">
+		<div class="span5 offset1">
+			<h5>{{profile.first_name}}&nbsp;{{profile.last_name}}@{{profile.username}}</h5>
+		</div>
+		<div class="span5">
+			<div class="btn-group">
+				<button class="btn">Followers {{profile.followers.all|length}}</button>
+				<button class="btn">Following {{profile.following.all|length}}</button>
+			</div>
+		</div>
+
+		<div class="span*">
+		    <ul class="thumbnails">
+		    	<li class="span5">
+		    		{% with STATIC_URL|add:'img/default-person.gif' as image_link %}
+		    			{% if profile.image.name|slice:'-5:-4' == '.' %}
+		    				<img src="{% if profile.image %}{{MEDIA_URL}}{{profile.image.name|slice:':-5'}}resized_{{profile.image.name|slice:'-5:'}}{% else %}{{image_link}}{% endif %}" data-full-size="{{MEDIA_URL}}{{profile.image.name}}" class="img-polaroid image" />
+		    			{% else %}
+							<img src="{% if profile.image %}{{MEDIA_URL}}{{profile.image.name|slice:':-4'}}resized_{{profile.image.name|slice:'-4:'}}{% else %}{{image_link}}{% endif %}" data-full-size="{{MEDIA_URL}}{{profile.image.name}}" class="img-polaroid image" />
+						{% endif %}
+					{% endwith %}
+			    </li>
+			    {% if can_see %}
+				    {% for media in user_media|slice:":6" %}
+					    <li class="span2">
+					    	<a data-id="image{{forspin.counter}}" href="{{media.multispin.multimedia_path.url}}" class="thumbnail image-preview">
+					    		{% if media.multispin.multimedia_path.name|slice:'-5:-4' == '.' %}
+					    			<img data-src="holder.js/300x200" data-full-size="{{media.multispin.multimedia_path.url}}" data-nr="{{forspin.counter}}" src="{{media.multispin.multimedia_path.url|slice:":-5"}}resized_{{media.multispin.multimedia_path.url|slice:"-5:"}}" alt="" class="carousel-image" />
+					    		{% else %}
+					    			<img data-src="holder.js/300x200" data-full-size="{{media.multispin.multimedia_path.url}}" data-nr="{{forspin.counter}}" src="{{media.multispin.multimedia_path.url|slice:":-4"}}resized_{{media.multispin.multimedia_path.url|slice:"-4:"}}" alt="" class="carousel-image" />
+					    		{% endif %}
+					    	</a>
+					    </li>
+					{% endfor %}
+					<span id="images-links" style="visibility:hidden" data-links="{ {% for media in user_media %}&#34;{{forspin.counter}}&#34;: &#34;{{media.multispin.multimedia_path.url}}&#34;,{% if forspin.last %}}{% endif%}{% endfor %}"></span>
+					{% if user_media|length > 6 %}
+						<li class="span1">
+						 	<div class="span*"></div>
+					    	<a class="thumbnail carousel-image" data-nr="7" >
+					    		{% trans 'More...' %}
+					    	</a>
+					    </li>
+				    {% endif %}
+				{% endif %}
+			</ul>
+		</div>
+		<div class="span*">
+			<div class="span4">
+				
+			</div>
+			<div class="span2 offset4">
+				<div class="btn-group">
+					{% if not follows_disabled|default:False %}
+						{% if not follows|default:False %}
+							<a href="{% url 'spin:user-follow' username=profile.username %}">
+								<button class="btn">{% trans 'Follow' %}</button>
+							</a>
+						{% else %}
+							<a href="{% url 'spin:user-stop-follow' username=profile.username %}">
+								<button class="btn">{% trans 'Stop Follow' %}</button>
+							</a>
+						{% endif %}
+						<button class="btn dropdown-toggle" data-toggle="dropdown">
+							<i class="icon-user"></i>
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							{% if not profile in user.userprofile.blocked.all %}
+								<li><a tabindex="-1" href="{% url 'spin:user-block' username=profile.username %}">{% trans 'Block' %}</a></li>
+							{% else %}
+								<li><a tabindex="-1" href="{% url 'spin:user-remove-block' username=profile.username %}">{% trans 'Unblock' %}</a></li>
+							{% endif %}
+							<li><a tabindex="-1" class="report" data-name="user" href="{% url 'spin:report-user' userid=profile.id %}">{% trans 'Report to admin' %}</a></li>
+						</ul>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		<div class="span*">
+		{% if user.superuser or can_see|default:False %}
+			<address>
+				<strong>{{profile.first_name}}&nbsp;{{profile.last_name}}</strong><br/>
+				{% trans 'Username' %}:&nbsp;@{{ profile.username }}<br/>
+				{% if email_visible|default:True %}
+					{% trans 'email address' %}:&nbsp;{{ profile.email }}<br/>
+				{% else %}
+					{% trans 'User decided to not show his email address' %}
+				{% endif %}
+			</address>
+		{% else %}
+			<p class="lead">{% blocktrans with username=profile.username %}This profile is private! Only {{username}}'s followings can see his details. You should also be approved and not blocked; if you know this user, send him a request.{% endblocktrans %}</p>
+		{% endif %}
+		</div>
+	</div>
+	{% if can_see|default:False %}
+		{% block user_spin_list %}
+			{% with False as simply_list %}
+				{% include 'spin_base/spin_list.html' %}
+						{# here goes the user's posts #}
+			{% endwith %}
+		{% endblock %}
+	{% endif %}
+	
+{% endblock %}

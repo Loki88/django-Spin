@@ -1,0 +1,147 @@
+{% extends 'spin_base/user_home.html' %}
+{% load i18n %}
+{% load tz %}
+{% block extrahead %}
+	{{ block.super }}
+	{{form.media}}
+{% endblock %}
+
+{% block body %}
+	<h4>{% trans "Your account informations" %}</h4>
+	<div class="row-fluid well">
+		<form  method="post" enctype="multipart/form-data" id="account-form" class="spin-form-upload" action="{% url 'spin:user-account' %}">
+			<fieldset>
+				<div class="span6">
+					<legend>{% trans "Modify your profile" %}</legend>
+					{% if form.non_field_errors %}
+						<div class="alert alert-block alert-error fade in">
+							<span class="alerthelp-inline">{{ form.non_field_errors }}</span>
+						</div>
+					{% endif %}
+					{% csrf_token %}
+					<input type="hidden" id="X-Progress-ID" name="X-Progress-ID" value="{{user.id}}"/>
+					<div class="control-group 
+						{% if form.first_name.errors %}error{% endif %}
+						">
+						<label for="inputName">{% trans 'First name' %}</label>
+						<div class="controls">
+							{% if form.first_name.errors %}
+								<span class="help-block">
+									{% for error in form.first_name.errors %}
+										{{ error }}<br/>
+									{% endfor %}
+								</span>
+							{% endif %}
+							{{ form.first_name }}
+						</div>
+					</div>
+					<div class="control-group 
+						{% if form.last_name.errors %}error{% endif %}
+						">
+						<label for="inputSurname">{% trans 'Last name' %}</label>
+						<div class="controls">
+							{% if form.last_name.errors %}
+								<span class="help-block">
+									{% for error in form.last_name.errors %}
+										{{ error }}<br/>
+									{% endfor %}
+								</span>
+							{% endif %}
+							{{ form.last_name }}
+						</div>
+					</div>
+					<div class="control-group 
+						{% if form.email.errors %}error{% endif %}
+						">
+						<label for="inputEmail">Email</label>
+						<div class="controls">
+							{% if form.email.errors %}
+								<span class="help-block">
+									{% for error in form.email.errors %}
+										{{ error }}<br/>
+									{% endfor %}
+								</span>
+							{% endif %}
+							{{ form.email }}
+						</div>
+					</div>
+					<div class="control-group
+						{% if form.username.errors %}error{% endif %}
+						">
+						<label for="inputUsername">{% trans 'Username' %}</label>
+						<div class="controls">
+							{% if form.username.errors %}
+								<span class="help-block">
+									{% for error in form.username.errors %}
+										{{ error }}<br/>
+									{% endfor %}
+								</span>
+							{% endif %}
+							{{ form.username }}
+						</div>
+					</div>
+					<div class="control-group
+						{% if form.image.errors %}error{% endif %}
+						">
+						<label for="inputimage">{% trans 'Add a profile image' %}</label>
+						<div class="controls">
+							{% if form.image.errors %}
+								<span class="help-block">
+									{% for error in form.image.errors %}
+										{{ error }}<br/>
+									{% endfor %}
+								</span>
+							{% endif %}
+							{{ form.image }}
+						</div>
+					</div>
+					<div class="control-group
+						{% if form.password.errors %}error{% endif %}
+						">
+						<label for="inputPassword">Password</label>
+						<div class="controls">
+							{% if form.password.errors %}
+								<span class="help-block">
+									{% for error in form.password.errors %}
+										{{ error }}<br/>
+									{% endfor %}
+								</span>
+							{% endif %}
+							{{ form.password }}
+						</div>
+					</div>
+					<div class="control-group">
+						<label for="inputPasswordConfirm">{% trans 'Confirm Password' %}</label>
+						<div class="controls">
+							{{ form.confirm_password }}
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="checkbox">{% trans 'Do you want a private profile?' %}
+							{{ form.private }}
+						</label>
+					</div>
+					<div class="control-group">
+						<label class="select">{% trans 'Select your locale for date and time' %}
+						    <select name="time_zone">
+						        {% for tz in timezones %}
+						        <option value="{{ tz }}"{% if tz == user.userprofile.time_zone %} selected="selected"{% endif %}>{{ tz }}</option>
+						        {% endfor %}
+						    </select>
+						</label>
+					</div>
+					<div class="control-group">
+						<input type="submit" class="btn span*" value="{% trans 'Save' %}" />
+					</div>
+				</div>
+			</fieldset>
+		</form>
+		<hr></hr>
+		<div class="row-fluid">
+			<div class=" well">
+				<h5>{% trans 'Do you want to delete your account?' %}</h5>
+				<a class="btn delete-this" data-name="account" href="{% url 'spin:delete-account' %}">{% trans 'Delete' %}</a>
+			</div>
+		</div>
+	</div>
+{% endblock %}

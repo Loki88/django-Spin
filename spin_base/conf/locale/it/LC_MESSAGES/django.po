@@ -1,0 +1,206 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-24 11:10+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin/reportedcomment.py:50 admin/reportedspin.py:54
+#: admin/userprofile.py:58
+msgid "Ban user"
+msgstr "Banna l'utente"
+
+#: admin/reportedcomment.py:56 admin/reportedspin.py:60
+msgid "Remove Ban"
+msgstr "Rimuovi il ban"
+
+#: admin/reporteduser.py:36 admin/userprofile.py:41
+msgid "User informations"
+msgstr "Informazioni sull'utente"
+
+#: admin/reporteduser.py:39 admin/userprofile.py:48
+msgid "Other informations"
+msgstr "Altre informazioni"
+
+#: admin/userprofile.py:44
+msgid "User relationship"
+msgstr "Relazioni dell'utente"
+
+#: admin/userprofile.py:63
+msgid "Remove ban"
+msgstr "Rimuovi il ban"
+
+#: forms/customize.py:79
+msgid "Page box color"
+msgstr ""
+
+#: forms/login.py:47
+msgid "This account is not active"
+msgstr "Questo account non è attivo"
+
+#: forms/login.py:49
+msgid "Wrong username or password"
+msgstr "Username o password errati"
+
+#: forms/recovery.py:33
+msgid "Passwords doesn't match"
+msgstr "Le password non corrispondono"
+
+#: forms/recovery.py:41 forms/recovery.py:62 forms/recovery.py:83
+msgid "Please, correct the fields in error"
+msgstr "Per favore, correggi i campi in errore"
+
+#: forms/registration.py:17 forms/userprofile.py:34
+msgid "Username"
+msgstr ""
+
+#: forms/registration.py:20
+msgid "Password"
+msgstr ""
+
+#: forms/registration.py:23 forms/userprofile.py:23
+msgid "Confirm Password"
+msgstr "Conferma la Password"
+
+#: forms/registration.py:29 forms/userprofile.py:31 forms/userprofile.py:36
+msgid "Name"
+msgstr "Nome"
+
+#: forms/registration.py:30 forms/userprofile.py:32
+msgid "Last name"
+msgstr "Nome"
+
+#: forms/registration.py:40
+msgid "This email is yet used"
+msgstr "Questa email è già usata"
+
+#: forms/reporting.py:21
+msgid "You've yet submitted a report about this user."
+msgstr "Hai già inviato un rapporto su questo utente"
+
+#: forms/reporting.py:43
+msgid "You've yet submitted a report about this spin."
+msgstr "Hai già inviato un rapporto su questo spin"
+
+#: forms/reporting.py:65
+msgid "You've yet submitted a report about this comment."
+msgstr "Hai già inviato un rapporto su questo commento"
+
+#: forms/spin.py:61
+#, python-format
+msgid "File size exceed the limit of %s. Current file size %s"
+msgstr "La dimensione del file supera il limite di %s. Dimensione corrente del file %s"
+
+#: forms/spin.py:65
+msgid "Filetype not allowed"
+msgstr "Tipo di file non consentito"
+
+#: forms/userprofile.py:60 forms/userprofile.py:62
+msgid "Username taken"
+msgstr "Username usato"
+
+#: forms/userprofile.py:68 forms/userprofile.py:70
+msgid "This email is used"
+msgstr "Questa email è usata"
+
+#: forms/userprofile.py:79 forms/userprofile.py:81
+msgid "Please correct the fields in error"
+msgstr "Per favore, correggi i campi in errore"
+
+#: models/style.py:19
+msgid "Do you want a reverse navbar?"
+msgstr "Vuoi una barra di navigazione con colori invertiti?"
+
+#: views/generic.py:86
+msgid "Public profiles on Spin:"
+msgstr "Profili pubblici su Spin:"
+
+#: views/generic.py:141
+msgid "followers list"
+msgstr "lista di followers"
+
+#: views/generic.py:162
+msgid "following list"
+msgstr "lista di following"
+
+#: views/accounting/ActivationView.py:27
+msgid "Your account has been successfully activated."
+msgstr "Il tuo account è stato attivato con successo."
+
+#: views/accounting/ActivationView.py:29
+msgid ""
+"Your account is not active, this may be an our problem. Retry, but if the "
+"problem persists, contact us."
+msgstr "Il tuo account non è attivo, potrebbe essere un nostro problema. Riprofa, ma se il problema persiste, contattaci."
+
+#: views/accounting/PasswordRecovery.py:57
+#: views/accounting/UsernameRecovery.py:33
+msgid "An email has been sent to your email account."
+msgstr "Un'email è stata inviata al tuo indirizzo email."
+
+#: views/accounting/PasswordRecovery.py:70
+msgid "spin: password recovery message"
+msgstr ""
+
+#: views/accounting/PasswordRecovery.py:71
+msgid "Password recovery message"
+msgstr ""
+
+#: views/accounting/PasswordRecovery.py:72
+msgid ""
+"the following link is valid for 20 minutes, do quickly, click on or copy and "
+"paste it on your browser.\n"
+msgstr ""
+
+#: views/accounting/PasswordRecovery.py:74
+#: views/accounting/RegistrationView.py:43
+#: views/accounting/UsernameRecovery.py:49
+msgid "If you should encounter some problem, contact us."
+msgstr ""
+
+#: views/accounting/RegistrationView.py:38
+msgid "Wellcome to spin"
+msgstr ""
+
+#: views/accounting/RegistrationView.py:39
+msgid "Tank you for registrating on spin"
+msgstr ""
+
+#: views/accounting/RegistrationView.py:40
+msgid ""
+"your account is ready to be used and you're experience on spin's starting.\n"
+"\t\t\t\tYou have just to confirm your email address. To do this, click on "
+"the following link or copy and paste it in your browser:\n"
+msgstr ""
+
+#: views/accounting/SetNewPassword.py:53
+msgid "Your password has been successfully changed."
+msgstr ""
+
+#: views/accounting/UsernameRecovery.py:44
+msgid "spin: username recovery message"
+msgstr ""
+
+#: views/accounting/UsernameRecovery.py:45
+msgid "Username recovery message"
+msgstr ""
+
+#: views/accounting/UsernameRecovery.py:46
+#, python-format
+msgid ""
+"your username is written below, be carefull, don't lost it \tagain.\n"
+"\t\tUsername = %s \n"
+" To login the site, click on the below link:\n"
+msgstr ""

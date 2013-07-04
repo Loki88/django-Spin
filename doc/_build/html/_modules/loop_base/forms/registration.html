@@ -1,0 +1,179 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>spin_base.forms.registration &mdash; spin: another Twitter clone 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="spin: another Twitter clone 1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">spin: another Twitter clone 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for spin_base.forms.registration</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Count</span>
+<span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">ugettext</span> <span class="k">as</span> <span class="n">_</span>
+<span class="kn">from</span> <span class="nn">spin_base.models</span> <span class="kn">import</span> <span class="n">UserProfile</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.core.mail</span> <span class="kn">import</span> <span class="n">EmailMultiAlternatives</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+
+<div class="viewcode-block" id="RegistrationForm"><a class="viewcode-back" href="../../../modules/others.html#spin_base.forms.registration.RegistrationForm">[docs]</a><span class="k">class</span> <span class="nc">RegistrationForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	This is a model form for user registration.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	
+	<span class="n">confirm_password</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">PasswordInput</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span>
+		<span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="s">&#39;inputPasswordConfirm&#39;</span><span class="p">,</span> <span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;input-medium span*&#39;</span><span class="p">,</span> <span class="s">&#39;placeholder&#39;</span> <span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s">&#39;Confirm Password&#39;</span><span class="p">)}))</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+
+	<span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+		<span class="n">model</span> <span class="o">=</span> <span class="n">UserProfile</span>
+		<span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;private&#39;</span><span class="p">,</span> <span class="s">&#39;first_name&#39;</span><span class="p">,</span> <span class="s">&#39;last_name&#39;</span><span class="p">,</span> <span class="s">&#39;email&#39;</span><span class="p">,</span> <span class="s">&#39;username&#39;</span><span class="p">,</span> <span class="s">&#39;password&#39;</span><span class="p">)</span>
+		<span class="n">widgets</span> <span class="o">=</span> <span class="p">{</span>
+			<span class="s">&#39;first_name&#39;</span><span class="p">:</span> <span class="n">forms</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="s">&#39;inputName&#39;</span><span class="p">,</span>	<span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;input-medium span* form-input&#39;</span><span class="p">,</span> <span class="s">&#39;placeholder&#39;</span> <span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s">&#39;Name&#39;</span><span class="p">)}),</span>
+			<span class="s">&#39;last_name&#39;</span> <span class="p">:</span> <span class="n">forms</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="s">&#39;inputSurname&#39;</span><span class="p">,</span> <span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;input-medium span* form-input&#39;</span><span class="p">,</span>	<span class="s">&#39;placeholder&#39;</span> <span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s">&#39;Last name&#39;</span><span class="p">)}),</span>
+			<span class="s">&#39;email&#39;</span> <span class="p">:</span> <span class="n">forms</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="s">&#39;inputEmail&#39;</span><span class="p">,</span> <span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;input-medium span* form-input&#39;</span><span class="p">,</span>	<span class="s">&#39;placeholder&#39;</span> <span class="p">:</span> <span class="s">&#39;email&#39;</span><span class="p">}),</span>
+			<span class="s">&#39;username&#39;</span> <span class="p">:</span> <span class="n">forms</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">TextInput</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="s">&#39;inputUsername&#39;</span><span class="p">,</span> <span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;input-medium span* form-input&#39;</span><span class="p">,</span> <span class="s">&#39;placeholder&#39;</span> <span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s">&#39;Username&#39;</span><span class="p">)}),</span>
+			<span class="s">&#39;password&#39;</span> <span class="p">:</span> <span class="n">forms</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">PasswordInput</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="s">&#39;inputPassword&#39;</span><span class="p">,</span> <span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;input-medium span* form-input&#39;</span><span class="p">,</span> <span class="s">&#39;placeholder&#39;</span> <span class="p">:</span> <span class="s">&#39;Password&#39;</span><span class="p">}),</span>
+		<span class="p">}</span>
+
+	<span class="k">class</span> <span class="nc">Media</span><span class="p">:</span>
+		<span class="n">extends</span> <span class="o">=</span> <span class="bp">True</span>
+		<span class="n">js</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;js/accounting.js&#39;</span><span class="p">,)</span>
+
+<div class="viewcode-block" id="RegistrationForm.is_valid"><a class="viewcode-back" href="../../../modules/others.html#spin_base.forms.registration.RegistrationForm.is_valid">[docs]</a>	<span class="k">def</span> <span class="nf">is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">		Validates the input.</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			True: if the inputs are valid.</span>
+<span class="sd">			False: if they&#39;re not valid.</span>
+<span class="sd">		&#39;&#39;&#39;</span>
+		<span class="n">form</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">RegistrationForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">is_valid</span><span class="p">()</span>
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;password&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;confirm_password&#39;</span><span class="p">):</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;Passwords don&#39;t match&quot;</span><span class="p">))</span>
+			<span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;Passwords don&#39;t match&quot;</span><span class="p">),</span> <span class="p">]</span>
+		<span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;password&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;Please, insert a valid password&quot;</span><span class="p">))</span>
+			<span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="s">&#39;password&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s">&quot;Please, insert a valid password&quot;</span><span class="p">),</span> <span class="p">]</span>
+
+		<span class="n">queryset</span> <span class="o">=</span> <span class="n">UserProfile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+		<span class="n">email_count</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;email&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+		<span class="n">user_count</span> <span class="o">=</span> <span class="n">queryset</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;username&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">email_count</span><span class="p">:</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;This email is used&#39;</span><span class="p">))</span>
+			<span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="s">&#39;email&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;This email is used&#39;</span><span class="p">),</span> <span class="p">]</span>
+		<span class="k">if</span> <span class="n">user_count</span><span class="p">:</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;Username taken&#39;</span><span class="p">))</span>
+			<span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;Username taken&#39;</span><span class="p">),</span> <span class="p">]</span>
+
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">errors</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">form</span><span class="p">:</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="s">&#39;__all__&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">&#39;Please correct the fields in error&#39;</span><span class="p">))</span>
+			<span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">errors</span><span class="p">[</span><span class="s">&#39;__all__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">&#39;Please correct the fields in error&#39;</span><span class="p">)</span>
+			<span class="k">return</span> <span class="bp">False</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="bp">True</span>
+
+	<span class="c"># def save(self):</span>
+	<span class="c"># 	user = UserProfile()</span>
+	<span class="c"># 	user.first_name = self.cleaned_data.get(&#39;first_name&#39;)</span>
+	<span class="c"># 	user.last_name = self.cleaned_data.get(&#39;last_name&#39;)</span>
+	<span class="c"># 	user.email = self.cleaned_data.get(&#39;email&#39;)</span>
+	<span class="c"># 	user.username = self.cleaned_data.get(&#39;username&#39;)</span>
+	<span class="c"># 	user.set_password(self.cleaned_data.get(&#39;password&#39;))</span>
+	<span class="c"># 	user.private = self.cleaned_data.get(&#39;is_private&#39;)</span>
+	<span class="c"># 	user.save()</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">spin: another Twitter clone 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Lorenzo Di Giuseppe.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

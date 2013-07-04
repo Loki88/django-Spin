@@ -1,0 +1,200 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>spin_base.views.relationship_control &mdash; spin: another Twitter clone 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="spin: another Twitter clone 1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">spin: another Twitter clone 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for spin_base.views.relationship_control</h1><div class="highlight"><pre>
+<span class="c"># This Python file uses the following encoding: utf-8</span>
+
+<span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">View</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponseRedirect</span>
+<span class="kn">from</span> <span class="nn">spin_base.models</span> <span class="kn">import</span> <span class="n">UserProfile</span><span class="p">,</span> <span class="n">Relationship</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
+<span class="kn">from</span> <span class="nn">django.utils.decorators</span> <span class="kn">import</span> <span class="n">method_decorator</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse</span>
+
+
+<div class="viewcode-block" id="AddBlock"><a class="viewcode-back" href="../../../modules/views.html#spin_base.views.relationship_control.AddBlock">[docs]</a><span class="k">class</span> <span class="nc">AddBlock</span><span class="p">(</span><span class="n">View</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	This class manages adding block to user profile.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	
+	<span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">)</span>
+	<span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">(</span><span class="n">AddBlock</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+		<span class="n">user_to_block</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">UserProfile</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+		<span class="k">if</span> <span class="n">user_to_block</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">blocked</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+			<span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">blocked</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">user_to_block</span><span class="p">)</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="n">rel</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">user_followed</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">follower</span><span class="o">=</span><span class="n">user_to_block</span><span class="p">)</span>
+			<span class="k">except</span><span class="p">:</span>
+				<span class="c"># the user is not followed by the blocked one</span>
+				<span class="k">pass</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">rel</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+		<span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;path&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="RemoveBlock"><a class="viewcode-back" href="../../../modules/views.html#spin_base.views.relationship_control.RemoveBlock">[docs]</a><span class="k">class</span> <span class="nc">RemoveBlock</span><span class="p">(</span><span class="n">View</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	This class manages removing block to user profile.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+
+	<span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">)</span>
+	<span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">(</span><span class="n">RemoveBlock</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+		<span class="n">user_blocked</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">UserProfile</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+		<span class="k">if</span> <span class="n">user_blocked</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">blocked</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+			<span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">blocked</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">user_blocked</span><span class="p">)</span>
+
+		<span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;path&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="Follow"><a class="viewcode-back" href="../../../modules/views.html#spin_base.views.relationship_control.Follow">[docs]</a><span class="k">class</span> <span class="nc">Follow</span><span class="p">(</span><span class="n">View</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	This class permits user to follow another one or to ask following.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+
+	<span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">)</span>
+	<span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">(</span><span class="n">Follow</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+		<span class="n">user_to_follow</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">UserProfile</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">user_to_follow</span><span class="o">.</span><span class="n">blocked</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">user_to_follow</span><span class="o">.</span><span class="n">user_followed</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">follower</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+				<span class="n">rel</span> <span class="o">=</span> <span class="n">Relationship</span><span class="p">(</span><span class="n">follower</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="p">,</span> <span class="n">followed</span><span class="o">=</span><span class="n">user_to_follow</span><span class="p">)</span>
+				<span class="k">if</span> <span class="n">user_to_follow</span><span class="o">.</span><span class="n">private</span><span class="p">:</span>
+					<span class="n">rel</span><span class="o">.</span><span class="n">approved</span> <span class="o">=</span> <span class="bp">False</span>
+				<span class="n">rel</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+
+		<span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;path&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="StopFollow"><a class="viewcode-back" href="../../../modules/views.html#spin_base.views.relationship_control.StopFollow">[docs]</a><span class="k">class</span> <span class="nc">StopFollow</span><span class="p">(</span><span class="n">View</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	This class removes the following relationship from one side of this one.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+
+	<span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">)</span>
+	<span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">(</span><span class="n">StopFollow</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+		<span class="n">user_followed</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">UserProfile</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">rel</span> <span class="o">=</span> <span class="n">user_followed</span><span class="o">.</span><span class="n">user_followed</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">follower</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="p">)</span>
+		<span class="k">except</span><span class="p">:</span>
+			<span class="c"># the user is not a follower</span>
+			<span class="k">pass</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">rel</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+
+		<span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;path&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="ApproveFollowing"><a class="viewcode-back" href="../../../modules/views.html#spin_base.views.relationship_control.ApproveFollowing">[docs]</a><span class="k">class</span> <span class="nc">ApproveFollowing</span><span class="p">(</span><span class="n">View</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	This class permits private users to approve the following requests.</span>
+<span class="sd">	If a user wants to disapprove, he should call StopFollow.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+
+	<span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">)</span>
+	<span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">(</span><span class="n">ApproveFollowing</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">private</span><span class="p">:</span>
+			<span class="n">user_waiting</span> <span class="o">=</span> <span class="n">get_object_or_404</span><span class="p">(</span><span class="n">UserProfile</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="n">rel</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="o">.</span><span class="n">user_followed</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">follower</span><span class="o">=</span><span class="n">user_waiting</span><span class="p">,</span> <span class="n">approved</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+			<span class="k">except</span><span class="p">:</span>
+				<span class="c"># there is no waiting relation or it&#39;s approved</span>
+				<span class="k">pass</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;method&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;accept&#39;</span><span class="p">:</span>
+					<span class="n">rel</span><span class="o">.</span><span class="n">approved</span><span class="o">=</span><span class="bp">True</span>
+					<span class="n">rel</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">rel</span><span class="o">.</span><span class="n">delete</span><span class="p">()</span>
+
+		<span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">reverse</span><span class="p">(</span><span class="s">&#39;spin:user-profile&#39;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;slug&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">}))</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">spin: another Twitter clone 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Lorenzo Di Giuseppe.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

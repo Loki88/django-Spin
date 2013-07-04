@@ -1,0 +1,10 @@
+{% extends 'spin_base/home_base.html' %}
+{% block extrahead %}
+	{{login_form.media}}
+{% endblock %}
+{% block content %}
+	<div class="span12"></div>
+	<div class="span3 offset4 well">
+		{% include 'forms/login.html' %}
+	</div>
+{% endblock %}

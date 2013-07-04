@@ -1,0 +1,52 @@
+
+.main-theme {
+	background-image: url("/static/img/background.jpg");
+	background-position: top;
+	background-repeat: no-repeat;
+	-moz-background-size: cover;
+        -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+
+.separate-container{
+	margin-top: 50px;
+}
+
+.bckg-color-white{
+	background-color: #FFFFFF;
+}
+
+.bckg-color-gray{
+	background-color: #BCBCBC;
+}
+
+footer {
+  margin-top: 45px;
+  padding-top: 5px;
+  border-top: 1px solid #eaeaea;
+  color: #999;
+}
+
+footer a {
+  color: #555;
+}  
+
+footer a:hover { 
+  color: #222;
+}
+
+footer small {
+  float: left;
+}
+
+footer ul {
+  float: right;
+  list-style: none;
+}
+
+footer ul li {
+  float: left;
+  margin-left: 10px;
+}

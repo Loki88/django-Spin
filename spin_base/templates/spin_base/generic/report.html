@@ -1,0 +1,35 @@
+{% extends 'spin_base/user_home.html' %}
+
+{% load i18n %}
+
+{% block body %}
+	<div class="row-fluid">
+		<div class="span6 offset2 well">
+			<form method="post" id="report-form" action="{{request_path}}">
+			 	{% csrf_token %}
+			 	<fieldset>
+			 		<legend>{% trans 'Report an abuse' %}</legend>
+			 		{% if form.non_field_errors %}
+						<div class="alert alert-block alert-error fade in">
+							<span class="alerthelp-inline">{{ form.non_field_errors }}</span>
+						</div>
+					{% endif %}
+			 		{% for field in form %}
+			 			<label>{{field.label}}</label>
+						<div class="controls">
+							{% if field.errors %}
+								<span class="help-block">
+									{% for error in form.field.errors %}
+										{{ error }}<br/>
+									{% endfor %}
+								</span>
+							{% endif %}
+							{{field}}
+						</div>
+			 		{% endfor %}
+			 		<input type="submit" class="btn span-mini" value="{% trans 'Send' %}" />
+			 	</fieldset>
+			</form>
+		</div>
+	</div>
+{% endblock %}

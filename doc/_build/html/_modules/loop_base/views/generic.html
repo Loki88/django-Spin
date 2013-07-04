@@ -1,0 +1,241 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>spin_base.views.generic &mdash; spin: another Twitter clone 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="spin: another Twitter clone 1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">spin: another Twitter clone 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for spin_base.views.generic</h1><div class="highlight"><pre>
+<span class="c"># This Python file uses the following encoding: utf-8</span>
+
+<span class="kn">from</span> <span class="nn">django.views.generic</span> <span class="kn">import</span> <span class="n">TemplateView</span><span class="p">,</span> <span class="n">ListView</span>
+<span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">ugettext</span> <span class="k">as</span> <span class="n">_</span>
+<span class="kn">from</span> <span class="nn">spin_base.forms</span> <span class="kn">import</span> <span class="n">LoginForm</span><span class="p">,</span> <span class="n">RegistrationForm</span><span class="p">,</span> <span class="n">SpinForm</span><span class="p">,</span> <span class="n">CommentForm</span>
+<span class="kn">from</span> <span class="nn">spin_base.models</span> <span class="kn">import</span> <span class="n">UserProfile</span><span class="p">,</span> <span class="n">Spin</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponseRedirect</span>
+<span class="kn">from</span> <span class="nn">django.core.urlresolvers</span> <span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span> <span class="nn">django.utils.decorators</span> <span class="kn">import</span> <span class="n">method_decorator</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">get_object_or_404</span>
+
+
+<div class="viewcode-block" id="HomeView"><a class="viewcode-back" href="../../../modules/views.html#spin_base.views.generic.HomeView">[docs]</a><span class="k">class</span> <span class="nc">HomeView</span><span class="p">(</span><span class="n">TemplateView</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	This view displays home page. If user is authenticated this redirects to</span>
+<span class="sd">	following and followers&#39; ribbits page, else this shows the home page with</span>
+<span class="sd">	login form and registration one.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+
+	<span class="n">template_name</span> <span class="o">=</span> <span class="s">&#39;spin_base/home_base.html&#39;</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Class attribute which defines the page to display in response to a user call.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+
+	<span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_authenticated</span><span class="p">()</span> <span class="ow">and</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">is_active</span><span class="p">:</span>
+			<span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span> <span class="n">reverse</span><span class="p">(</span><span class="s">&#39;spin:user-home&#39;</span><span class="p">)</span> <span class="p">)</span>
+		<span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">HomeView</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+	<span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="n">username</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">get_signed_cookie</span><span class="p">(</span><span class="s">&#39;access&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">username</span><span class="p">:</span>
+			<span class="n">login_form</span> <span class="o">=</span> <span class="n">LoginForm</span><span class="p">(</span><span class="n">initial</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;username&#39;</span><span class="p">:</span> <span class="n">username</span><span class="p">,</span> <span class="s">&#39;remember&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">})</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">login_form</span> <span class="o">=</span> <span class="n">LoginForm</span><span class="p">()</span>
+		<span class="n">context</span><span class="p">[</span><span class="s">&#39;login_form&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">login_form</span>
+		<span class="n">context</span><span class="p">[</span><span class="s">&#39;registration_form&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">RegistrationForm</span><span class="p">()</span>
+		<span class="k">return</span> <span class="n">context</span>
+
+</div>
+<div class="viewcode-block" id="UserHomeView"><a class="viewcode-back" href="../../../modules/views.html#spin_base.views.generic.UserHomeView">[docs]</a><span class="k">class</span> <span class="nc">UserHomeView</span><span class="p">(</span><span class="n">ListView</span><span class="p">):</span>
+	<span class="c"># queryset = Spin.objects.all()</span>
+	<span class="n">paginate_by</span> <span class="o">=</span> <span class="mi">15</span>
+	<span class="n">template_name</span> <span class="o">=</span> <span class="s">&#39;spin_base/user_home.html&#39;</span>
+	<span class="n">context_object_name</span> <span class="o">=</span> <span class="s">&#39;relevant_elements&#39;</span>
+
+	<span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">)</span>
+	<span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">UserHomeView</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;page&#39;</span><span class="p">]</span>
+		<span class="k">except</span><span class="p">:</span>
+			<span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;page&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">1</span>
+		<span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">UserHomeView</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s">&#39;path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">path</span>
+		<span class="n">context</span><span class="p">[</span><span class="s">&#39;comment_form&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">CommentForm</span><span class="p">()</span>
+		<span class="n">context</span><span class="p">[</span><span class="s">&#39;spin_form&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">SpinForm</span><span class="p">()</span>
+		<span class="n">context</span><span class="p">[</span><span class="s">&#39;home_active&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;active&#39;</span>
+		<span class="k">return</span> <span class="n">context</span>
+
+	<span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="n">Spin</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">author__user_followed__follower</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="p">,</span> <span class="n">author__user_followed__approved</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="PublicProfiles"><a class="viewcode-back" href="../../../modules/views.html#spin_base.views.generic.PublicProfiles">[docs]</a><span class="k">class</span> <span class="nc">PublicProfiles</span><span class="p">(</span><span class="n">ListView</span><span class="p">):</span>
+	<span class="c">#queryset = UserProfile.objects.all().filter(private=False).order_by(&#39;-spinned__date&#39;).distinct(&#39;username&#39;)</span>
+	<span class="n">template_name</span> <span class="o">=</span> <span class="s">&#39;spin_base/generic/user_list.html&#39;</span>
+	<span class="n">context_object_name</span> <span class="o">=</span> <span class="s">&#39;user_list&#39;</span>
+	<span class="n">paginate_by</span> <span class="o">=</span> <span class="mi">15</span>
+
+	<span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">PublicProfiles</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s">&#39;path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">path</span>
+		<span class="n">context</span><span class="p">[</span><span class="s">&#39;list_title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">&#39;Public profiles on Spin:&#39;</span><span class="p">)</span>
+		<span class="n">context</span><span class="p">[</span><span class="s">&#39;spin_form&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">SpinForm</span><span class="p">()</span>
+		<span class="n">context</span><span class="p">[</span><span class="s">&#39;public_profiles_active&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;active&#39;</span>
+		<span class="k">return</span> <span class="n">context</span>
+
+	<span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="n">UserProfile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">private</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span><span class="o">.</span><span class="n">exclude</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">&#39;last_login&#39;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ListControl"><a class="viewcode-back" href="../../../modules/views.html#spin_base.views.generic.ListControl">[docs]</a><span class="k">class</span> <span class="nc">ListControl</span><span class="p">(</span><span class="n">ListView</span><span class="p">):</span>
+	<span class="n">template_name</span> <span class="o">=</span> <span class="s">&#39;spin_base/generic/user_list.html&#39;</span>
+	<span class="n">context_object_name</span> <span class="o">=</span> <span class="s">&#39;user_list&#39;</span>
+
+	<span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">)</span>
+	<span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span> <span class="o">!=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]:</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="n">target_user</span> <span class="o">=</span> <span class="n">UserProfile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">])</span>
+			<span class="k">except</span><span class="p">:</span>
+				<span class="k">pass</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">target_user</span><span class="o">.</span><span class="n">private</span> <span class="ow">and</span> <span class="n">target_user</span><span class="o">.</span><span class="n">user_followed</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">follower</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">userprofile</span><span class="p">,</span> <span class="n">approved</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">())</span>\
+						<span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">target_user</span><span class="o">.</span><span class="n">private</span><span class="p">):</span>
+					<span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">ListControl</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+			
+			<span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;path&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">))</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">ListControl</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">ListControl</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s">&#39;path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">path</span>
+		<span class="n">context</span><span class="p">[</span><span class="s">&#39;spin_form&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">SpinForm</span><span class="p">()</span>
+		<span class="k">return</span> <span class="n">context</span>
+</div>
+<div class="viewcode-block" id="FollowersList"><a class="viewcode-back" href="../../../modules/views.html#spin_base.views.generic.FollowersList">[docs]</a><span class="k">class</span> <span class="nc">FollowersList</span><span class="p">(</span><span class="n">ListControl</span><span class="p">):</span>
+	<span class="c"># template_name = &#39;spin_base/user_list.html&#39;</span>
+	<span class="c"># context_object_name = &#39;user_list&#39;</span>
+
+	<span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">)</span>
+	<span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">FollowersList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="n">UserProfile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user_following__followed__username</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">],</span>  <span class="n">user_following__approved</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">FollowersList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+		<span class="n">context</span><span class="p">[</span><span class="s">&#39;active_followers&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;active&#39;</span>
+		<span class="n">context</span><span class="p">[</span><span class="s">&#39;list_title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s">&#39;followers list&#39;</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">context</span>
+</div>
+<div class="viewcode-block" id="FollowingList"><a class="viewcode-back" href="../../../modules/views.html#spin_base.views.generic.FollowingList">[docs]</a><span class="k">class</span> <span class="nc">FollowingList</span><span class="p">(</span><span class="n">ListControl</span><span class="p">):</span>
+	<span class="c"># template_name = &#39;spin_base/user_list.html&#39;</span>
+	<span class="c"># context_object_name = &#39;user_list&#39;</span>
+
+	<span class="nd">@method_decorator</span><span class="p">(</span><span class="n">login_required</span><span class="p">)</span>
+	<span class="k">def</span> <span class="nf">dispatch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">FollowingList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dispatch</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="n">UserProfile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">user_followed__follower__username</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">],</span>  <span class="n">user_followed__approved</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">get_context_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="n">context</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="n">context</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">FollowingList</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_context_data</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+		<span class="n">context</span><span class="p">[</span><span class="s">&#39;active_following&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;active&#39;</span>
+		<span class="n">context</span><span class="p">[</span><span class="s">&#39;list_title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span><span class="s">&#39;username&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">_</span><span class="p">(</span><span class="s">&#39;following list&#39;</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">context</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">spin: another Twitter clone 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Lorenzo Di Giuseppe.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

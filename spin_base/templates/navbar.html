@@ -1,0 +1,46 @@
+{% load i18n %}
+<ul class="nav">
+	<li class="divider-vertical"></li>
+	<li class="{{home_active}}"><a href="{% url 'spin:home' %}">{% trans "Followers' spins" %}</a></li>
+	<li class="divider-vertical"></li>
+	<li class="{{profile_active}}"><a href="{% url 'spin:user-profile' user.username %}">{% trans 'Profile' %}</a></li>
+	<li class="divider-vertical"></li>
+	<li class="{{public_profiles_active}}"><a href="{% url 'spin:public-profiles' %}">{% trans 'Public Profiles' %}</a></li>
+	<li class="divider-vertical"></li>
+	<li class="{{public_spins_active}}"><a href="{% url 'spin:latest-spins' %}">{% trans 'Latest spins' %}</a></li>
+	<li class="divider-vertical"></li>
+	<form class="navbar-search form-search" method="get" action="{% url 'spin:search' %}">
+    	<div class="input-append">
+	    	<input type="text" name="search_string" class="span3 search-query" placeholder="Search" />
+	    	<button class="btn" type="submit">
+	    		<i class="icon-search"></i>
+	    	</button>
+	    </div>
+    </form>							
+    <li class="divider-vertical"></li>
+</ul>
+<ul class="nav pull-right">
+	<li>
+		<a class="btn {% if is_inverse|default:True %}btn-inverse{% endif %}" href="#spin" role="button" data-toggle="modal">
+			<i class="icon-pencil {% if is_inverse|default:True %}icon-white{% endif %}"></i>
+		</a>
+	</li>
+	<li>
+		<div class="btn-group span-mini">
+	    	<a class="btn {% if is_inverse|default:True %}btn-inverse{% endif %} dropdown-toggle" data-toggle="dropdown" href="#">
+	    		<i class="icon-list {% if is_inverse|default:True %}icon-white{% endif %} pull-left"></i>
+	    		&nbsp;Settings&nbsp;
+	    		<span class="caret"></span>
+	    	</a>
+	    	{% with  user.userprofile.style as style %}
+			    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+				    <li><a tabindex="-1" href="{% url 'spin:user-account' %}">Account</a></li>
+				    <li><a tabindex="-1" href="{% url 'spin:customize' %}">{% trans 'Customize' %}</a></li>
+				    <li><a tabindex="-1" href="#">Something else here</a></li>
+				    <li class="divider"></li>
+				    <li><a tabindex="-1" href="{% url 'spin:logout' %}">Logout</a></li>
+		    	</ul>
+	    	{% endwith %}
+    	</div>
+	</li>
+</ul>

@@ -1,0 +1,17 @@
+{% extends 'spin_base/home_base.html' %}
+{% load i18n %}
+
+{% block content %}
+	<div class="span6 offset3 well">
+		<div class="control-group success text-center">
+			<div class="control">
+				<h4>
+					<span class="help-block">
+						{% blocktrans %}"Thank you for your registration. You will soon receive a confirmation email,
+						 use it to activate your account."{% endblocktrans %}
+					</span>
+				</h4>
+			</div>
+		</div>
+	</div>
+{% endblock %}

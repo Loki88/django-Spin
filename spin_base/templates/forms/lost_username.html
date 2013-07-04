@@ -1,0 +1,31 @@
+{% extends 'spin_base/home_base.html' %}
+{% load i18n %}
+
+{% block extrahead %}
+	{{form.media}}
+{% endblock %}
+
+{% block content %}
+	<div class="span6 offset3 well">
+		<form action="{% url 'spin:username-recovery' %}" class="spin-form" method="post">
+			<fieldset>
+				<legend>{% trans 'Recover your username' %}</legend>
+				{% csrf_token %}
+				<div class="control-group {% if form.email.errors %}error{% endif %}">
+					<label>{% trans 'Please, insert your email address' %}</label>
+					<div class="control">
+						{{form.email}}
+						{% if form.email.errors %}
+							<span class="help-block">
+								{% for error in form.email.errors %}
+									{{ error }}<br/>
+								{% endfor %}
+							</span>
+						{% endif %}
+					</div>
+				</div>
+				<input type="submit" value="{% trans 'Recover' %}" />
+			</fieldset>
+		</form>
+	</div>
+{% endblock %}

@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load cache %}
+{% load staticfiles %}
+{#{% load staticfiles %}#}
+
+{% cache 600 sidebar user.username %}
+{% block sidebar %}
+		<div class="row-fluid">
+			<div class="well">
+				<ul class="nav nav-list">
+					<li class="nav-header">{% trans "Yours lists" %}</li>
+					<li class="{{active_followers}}"><a href="{% url 'spin:user-followers-list' user.username %}">Followers {{ user.userprofile.followers.all|length }}</a></li>
+					<li class="{{active_following}}"><a href="{% url 'spin:user-following-list' user.username %}">Following {{ user.userprofile.following.all|length }}</a></li>
+					{# <li class="{{active_requests}}"><a href="{% url 'spin:user-profile' user.username %}">{% trans 'Requests' %} {{ user.userprofile.user_following|length|add:"-"user.userprofile.user_following__approved|length}}</a></li> #}
+				</ul>
+			</div>
+			<div class="span12"></div>
+			{% block user-info %}
+			{% endblock %}
+		</div>
+{% endblock %}
+{% endcache %}
+
+{% block body %}
+	<h4>{% trans "Latest Spins from your followers:" %}</h4>
+	{% include 'spin_base/spin_list.html' %}
+{% endblock %}
+
+{% block extrahead %}
+	<script type="text/javascript" src="{{ STATIC_URL }}js/images.js"></script>
+	{{ comment_form.media }}
+	{{ spin_form.media }}
+{% endblock %}
+
+{% block modal-spin %}
+	<div id="spin" class="modal hide fade" tabindex="-10" role="dialog" aria-labelledby="spinModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			{#<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>#}
+			<h4 id="spinModalLabel">{% trans 'Spin something...' %}</h4>
+		</div>
+		<form method="post" enctype="multipart/form-data" id="spin-form" action="{% url 'spin:create-spin' %}">
+		 	<div class="modal-body">
+				{% csrf_token %}
+				<div class="row-fluid">
+					{{spin_form.content}}
+					<span id="spin-count" data-length="140" class="input-mini uneditable-input"></span>
+				</div>
+				<div class="row-fluid">
+					{{spin_form.upload_file}}
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal" aria-hidden="true">{% trans 'Close' %}</button>
+				<input type="submit" class="btn btn-primary" value="{% trans 'Spin it!'%}" />
+			</div>
+		</form>
+	</div>
+	<div id="report-modal" class="modal hide fade" tabindex="-10" role="dialog" aria-labelledby="spinModalLabel" aria-hidden="true" visibility="hidden">
+		<div class="modal-header">
+			<h4 id="reportModalLabel">{% trans 'Report to admin...' %}</h4>
+		</div>
+		<div class="row-fluid">
+			<form method="post" id="report-form" action="#">
+			 	{% csrf_token %}
+		 		
+		 		<div class="modal-footer">
+					<button class="btn" data-dismiss="modal" aria-hidden="true">{% trans 'Close' %}</button>
+					<input type="submit" class="btn btn-primary" value="{% trans 'Report'%}" />
+				</div>
+			</form>
+		</div>
+	</div>
+{% endblock %}

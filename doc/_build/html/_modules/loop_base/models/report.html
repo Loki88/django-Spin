@@ -1,0 +1,171 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>spin_base.models.report &mdash; spin: another Twitter clone 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="spin: another Twitter clone 1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="spin_base.models" href="../models.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">spin: another Twitter clone 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../models.html" accesskey="U">spin_base.models</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for spin_base.models.report</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">spin_base.models</span> <span class="kn">import</span> <span class="n">UserProfile</span><span class="p">,</span> <span class="n">Spin</span><span class="p">,</span> <span class="n">Comment</span>
+
+
+<div class="viewcode-block" id="Report"><a class="viewcode-back" href="../../../modules/models.html#spin_base.models.report.Report">[docs]</a><span class="k">class</span> <span class="nc">Report</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Base class for reporting user&#39;s abuses</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+
+	<span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">UserProfile</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&#39;reported&#39;</span><span class="p">)</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	User who submit the report.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">content</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Text explaination of report.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Date when it was submitted.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+
+	<span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+		<span class="n">app_label</span> <span class="o">=</span> <span class="s">&quot;spin_base&quot;</span>
+
+<div class="viewcode-block" id="Report.get_target"><a class="viewcode-back" href="../../../modules/models.html#spin_base.models.report.Report.get_target">[docs]</a>	<span class="k">def</span> <span class="nf">get_target</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">userreport</span><span class="o">.</span><span class="n">target_profile</span>
+		<span class="k">except</span><span class="p">:</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spinreport</span><span class="o">.</span><span class="n">target_spin</span>
+			<span class="k">except</span><span class="p">:</span>
+				<span class="k">try</span><span class="p">:</span>
+					<span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">commentreport</span><span class="o">.</span><span class="n">target_comment</span>
+				<span class="k">except</span><span class="p">:</span>
+					<span class="k">return</span> <span class="bp">None</span>
+
+		<span class="k">return</span> <span class="n">target</span>
+
+
+
+</div></div>
+<div class="viewcode-block" id="UserReport"><a class="viewcode-back" href="../../../modules/models.html#spin_base.models.report.UserReport">[docs]</a><span class="k">class</span> <span class="nc">UserReport</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Specific report for UserProfile.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+
+	<span class="n">target_profile</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">UserProfile</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&#39;reported_user&#39;</span><span class="p">)</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Target profile of a report.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+		<span class="n">app_label</span> <span class="o">=</span> <span class="s">&#39;spin_base&#39;</span>
+
+</div>
+<div class="viewcode-block" id="SpinReport"><a class="viewcode-back" href="../../../modules/models.html#spin_base.models.report.SpinReport">[docs]</a><span class="k">class</span> <span class="nc">SpinReport</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Specific report for Spin.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+
+	<span class="n">target_spin</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Spin</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&#39;reported_spin&#39;</span><span class="p">)</span>
+
+	<span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+		<span class="n">app_label</span> <span class="o">=</span> <span class="s">&#39;spin_base&#39;</span>
+
+</div>
+<div class="viewcode-block" id="CommentReport"><a class="viewcode-back" href="../../../modules/models.html#spin_base.models.report.CommentReport">[docs]</a><span class="k">class</span> <span class="nc">CommentReport</span><span class="p">(</span><span class="n">Report</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Specific report for Comment.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+
+	<span class="n">target_comment</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Comment</span><span class="p">,</span> <span class="n">related_name</span><span class="o">=</span><span class="s">&#39;reported_comment&#39;</span><span class="p">)</span>
+
+	<span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+		<span class="n">app_label</span> <span class="o">=</span> <span class="s">&#39;spin_base&#39;</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">spin: another Twitter clone 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../models.html" >spin_base.models</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Lorenzo Di Giuseppe.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

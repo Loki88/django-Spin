@@ -1,0 +1,16 @@
+{% extends 'spin_base/home_base.html' %}
+{% load i18n %}
+
+{% block content %}
+	<div class="row-fluid">
+		<h4>{% trans 'Tank you for registrating on spin'}</h4>
+	</div>
+	<div class="row-fluid well">
+		<p>{% blocktrans %}{{new_user.name}} your account is ready to be used and you're experience on spin's starting.
+			You have just to confirm your email address. To do this, click on the following link or copy and paste it in your browser:{% endblocktrans %}</p>
+			<a href="{{server_url}}{% url 'spin:activation' pk=new_user.pk activation_key=new_user.activation %}" />
+	</div>
+	<div class="row-fluid well">
+		{% blocktrans %}If you should encounter some problem, contact us.{% endblocktrans %}
+	</div>
+{% endblock %}

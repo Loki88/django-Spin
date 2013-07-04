@@ -1,0 +1,7 @@
+{% extends 'spin_base/user_home.html' %}
+{% load i18n %}
+
+{% block body %}
+	<h4>{% trans "Latest public Spins" %}</h4>
+	{% include 'spin_base/spin_list.html' %}
+{% endblock %}

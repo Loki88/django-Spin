@@ -1,0 +1,194 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>spin_base.forms.spin &mdash; spin: another Twitter clone 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="spin: another Twitter clone 1.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">spin: another Twitter clone 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for spin_base.forms.spin</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">django.template.defaultfilters</span> <span class="kn">import</span> <span class="n">filesizeformat</span>
+<span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">ugettext</span> <span class="k">as</span> <span class="n">_</span>
+<span class="kn">from</span> <span class="nn">spin</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">spin_base.models</span> <span class="kn">import</span> <span class="n">Spin</span><span class="p">,</span> <span class="n">MultiSpin</span>
+
+<div class="viewcode-block" id="SpinForm"><a class="viewcode-back" href="../../../modules/others.html#spin_base.forms.spin.SpinForm">[docs]</a><span class="k">class</span> <span class="nc">SpinForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Form that handles the fields to submit a spin.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">content_types</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;image&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;image/jpeg&#39;</span><span class="p">,</span> <span class="s">&#39;image/gif&#39;</span><span class="p">,</span> <span class="s">&#39;image/png&#39;</span><span class="p">,</span> <span class="p">),</span> <span class="p">}</span> <span class="c">#&#39;video&#39;: (&#39;video/mpeg&#39;, &#39;video/mp4&#39;, &#39;video/x-flv&#39;, &#39;video/x-ms-wmv&#39;, &#39;video/x-msvideo&#39;,)}</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Allowed content-types for file attached to a spin (multispin case).</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">max_upload_size</span> <span class="o">=</span> <span class="mi">1572864</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Max upload size in byte.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+
+	<span class="n">resize_width</span> <span class="o">=</span> <span class="mi">200</span> <span class="c">#px</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Resize width. The height is calculated from this value.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+
+	<span class="n">upload_file</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">FileField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Attached file.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+
+	<span class="n">content</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">widget</span><span class="o">=</span><span class="n">forms</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">Textarea</span><span class="p">(</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;rows&#39;</span><span class="p">:</span> <span class="s">&#39;4&#39;</span><span class="p">,</span> <span class="s">&#39;cols&#39;</span><span class="p">:</span> <span class="s">&#39;5&#39;</span><span class="p">,</span> <span class="s">&#39;class&#39;</span><span class="p">:</span> <span class="s">&#39;spin-area&#39;</span><span class="p">,</span> <span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="s">&#39;main-spin-area&#39;</span> <span class="p">,</span><span class="s">&#39;style&#39;</span><span class="p">:</span> <span class="s">&#39;resize: none; width: 97%;&#39;</span><span class="p">}))</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Text content in Spin</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+
+
+	<span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+		<span class="n">model</span> <span class="o">=</span> <span class="n">Spin</span>
+		<span class="n">exclude</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;author&#39;</span><span class="p">,)</span>
+		<span class="c"># widgets = {</span>
+		<span class="c"># 	&#39;content&#39; : forms.widgets.Textarea(attrs={&#39;rows&#39;: &#39;4&#39;, &#39;cols&#39;: &#39;5&#39;, &#39;class&#39;: &#39;spin-area&#39;, &#39;id&#39;: &#39;main-spin-area&#39; ,&#39;style&#39;: &#39;resize: none; width: 97%;&#39;}),</span>
+		<span class="c"># }</span>
+
+	<span class="k">class</span> <span class="nc">Media</span><span class="p">:</span>
+		<span class="n">js</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;js/spin-count.js&#39;</span><span class="p">,</span> <span class="s">&#39;js/spin.js&#39;</span><span class="p">,</span> <span class="p">)</span>
+
+
+<div class="viewcode-block" id="SpinForm.clean"><a class="viewcode-back" href="../../../modules/others.html#spin_base.forms.spin.SpinForm.clean">[docs]</a>	<span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">		Cleans the submitted data.</span>
+<span class="sd">		Raises:</span>
+<span class="sd">			ValidationError</span>
+<span class="sd">		&#39;&#39;&#39;</span>
+		<span class="n">cleaned</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">SpinForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
+		<span class="c"># controllo sul file</span>
+		<span class="n">up_file</span> <span class="o">=</span> <span class="n">cleaned</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;upload_file&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">up_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+
+			<span class="k">if</span> <span class="n">up_file</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_upload_size</span><span class="p">:</span> 
+				<span class="k">raise</span> <span class="n">forms</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span> <span class="n">_</span><span class="p">(</span><span class="s">&#39;File size exceed the limit of </span><span class="si">%s</span><span class="s">. Current file size </span><span class="si">%s</span><span class="s">&#39;</span>\
+					<span class="o">%</span> <span class="p">(</span><span class="n">filesizeformat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_upload_size</span><span class="p">),</span> <span class="n">filesizeformat</span><span class="p">(</span><span class="n">up_file</span><span class="o">.</span><span class="n">_size</span><span class="p">))))</span>
+
+			<span class="k">if</span> <span class="n">up_file</span><span class="o">.</span><span class="n">content_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">content_types</span><span class="p">[</span><span class="s">&#39;image&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">up_file</span><span class="o">.</span><span class="n">content_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">content_types</span><span class="p">[</span><span class="s">&#39;video&#39;</span><span class="p">]:</span>
+				<span class="k">raise</span> <span class="n">forms</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span> <span class="n">_</span><span class="p">(</span><span class="s">&#39;Filetype not allowed&#39;</span><span class="p">))</span>
+		<span class="k">return</span> <span class="n">cleaned</span>
+
+	<span class="c"># def is_valid(self):</span>
+	<span class="c"># 	valid = super(SpinForm, self).is_valid()</span>
+	<span class="c"># 	if not valid:</span>
+	<span class="c"># 		try:</span>
+	<span class="c"># 			self.errors[&#39;__all__&#39;].append(self.errors.get(&#39;content&#39;))</span>
+	<span class="c"># 		except KeyError:</span>
+	<span class="c"># 			self.errors[&#39;__all__&#39;] = self.errors.get(&#39;content&#39;)</span>
+	<span class="c"># 	return valid</span>
+</div>
+<div class="viewcode-block" id="SpinForm.save"><a class="viewcode-back" href="../../../modules/others.html#spin_base.forms.spin.SpinForm.save">[docs]</a>	<span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">		Saves a Spin or a MultiSpin, handling the resize process.</span>
+<span class="sd">		Returns:</span>
+<span class="sd">			Spin. or MultiSpin.</span>
+<span class="sd">		&#39;&#39;&#39;</span>
+	 	<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;upload_file&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+	 		<span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">SpinForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+	 	<span class="k">else</span><span class="p">:</span>
+	 		<span class="n">spin</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">SpinForm</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+	 		<span class="n">multi_spin</span> <span class="o">=</span> <span class="n">MultiSpin</span><span class="p">()</span>
+	 		<span class="n">multi_spin</span><span class="o">.</span><span class="n">author</span> <span class="o">=</span> <span class="n">spin</span><span class="o">.</span><span class="n">author</span>
+	 		<span class="n">multi_spin</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">spin</span><span class="o">.</span><span class="n">content</span>
+	 		<span class="n">multi_spin</span><span class="o">.</span><span class="n">multimedia_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;upload_file&#39;</span><span class="p">)</span>
+	 		<span class="n">multi_spin</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+	 		<span class="c"># create a resized image for multispin presentation</span>
+	 		<span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">multi_spin</span><span class="o">.</span><span class="n">multimedia_path</span><span class="p">)</span>
+	 		<span class="c">#if img.size[0] &gt; self.resize_width:</span>
+	 			<span class="c"># size[0] is the width, size[1] the height</span>
+ 			<span class="n">resize_height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">resize_width</span><span class="o">/</span><span class="n">img</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+ 			<span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">resize_width</span><span class="p">,</span> <span class="n">resize_height</span><span class="p">),</span> <span class="n">Image</span><span class="o">.</span><span class="n">ANTIALIAS</span><span class="p">)</span>
+ 			<span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">MEDIA_ROOT</span> <span class="o">+</span> <span class="n">multi_spin</span><span class="o">.</span><span class="n">multimedia_path</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+ 			<span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;resized_&#39;</span> <span class="o">+</span> <span class="n">path</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&#39;jpeg&#39;</span><span class="p">)</span>
+	 		<span class="k">return</span> <span class="n">multi_spin</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">spin: another Twitter clone 1.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Lorenzo Di Giuseppe.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

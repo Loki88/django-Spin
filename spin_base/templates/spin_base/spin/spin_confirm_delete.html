@@ -1,0 +1,19 @@
+{% extends 'spin_base/user_home.html' %}
+{% load i18n %}
+
+
+{% block body %}
+	<div class="row-fluid">
+		<div class="well">
+			<fieldset>
+				<legend>{% trans 'Are you sure deleting this spin?' %}</legend>
+				<form method="post" action="{% url 'spin:delete-spin' spin_id=object.id %}" >
+					{% csrf_token %}
+					<input type="submit" class="btn" value="{% trans 'Yes, proceed!' %}" />
+					<a class="btn" href="{{request_path}}">{% trans 'No, bring me back!' %}</a>
+				</form>
+			</fieldset>
+		</div>
+	</div>
+{% endblock %}
+
