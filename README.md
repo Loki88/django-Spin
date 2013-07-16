@@ -1,7 +1,7 @@
 django-Spin
 ===========
 
-Applications developed with Django web framework.
+A Twitter clone developed with Django web framework.
 
 ------------------------------------------------
 Django version 1.5.1
